@@ -89,6 +89,12 @@
     --bg-hex: white;
 }
 
+.§k { text-decoration: line-through wavy 0.25em }
+.§l { font-weight: bold }
+.§m { text-decoration: line-through }
+.§n { text-decoration: underline }
+.§o { font-style: italic }
+
 *{
     -webkit-text-size-adjust: none;
     text-size-adjust: none;
