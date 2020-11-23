@@ -471,6 +471,7 @@ header > *{
     border-radius: 18px;
     background-color: rgba(var(--background-rgb),0.15);
     cursor: pointer;
+    transition: background-color .1s;
     color: var(--text-hex);
 }
 
