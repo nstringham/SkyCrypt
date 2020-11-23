@@ -53,6 +53,24 @@
     --§e: #FFFF55;
     --§f: #FFFFFF;
 
+    /* Nicer Minecraft color codes for use in rank */
+    --§0-nice: var(--§0);
+    --§1-nice: #3251AE;
+    --§2-nice: var(--§2);
+    --§3-nice: var(--§3);
+    --§4-nice: var(--§4);
+    --§5-nice: var(--§5);
+    --§6-nice: var(--§6);
+    --§7-nice: #333333;
+    --§8-nice: var(--§8);
+    --§9-nice: var(--§9);
+    --§a-nice: #40BB40;
+    --§b-nice: #51C4D7;
+    --§c-nice: #C43C3C;
+    --§d-nice: #D985BC;
+    --§e-nice: #EAA522;
+    --§f-nice: #000000;
+
     /* Header Logo */
     --logo: url(https://sky.shiiyu.moe/resources/img/logo_square.png?v2);
 

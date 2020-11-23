@@ -542,14 +542,12 @@ module.exports = {
         if(rankText === null)
             return output;
 
-        rankColor = constants.minecraft_formatting[rankColor].niceColor
-        || constants.minecraft_formatting[rankColor].color;
+        rankColor = `var(--§${rankColor}-nice)`;
 
         output = `<div class="rank-tag ${plusText ? 'rank-plus' : ''}"><div class="rank-name" style="background-color: ${rankColor}">${rankText}</div>`;
 
         if(plusText){
-            plusColor = constants.minecraft_formatting[plusColor].niceColor
-            || constants.minecraft_formatting[plusColor].color
+            plusColor = `var(--§${plusColor}-nice)`
 
             output += `<div class="rank-plus" style="background-color: ${plusColor}"><div class="rank-plus-before" style="background-color: ${plusColor};"></div><span class="rank-plus-text">${plusText}</span></div>`;
         }
