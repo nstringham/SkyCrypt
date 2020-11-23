@@ -34,6 +34,24 @@
 
     /* used when --bg can't be used */
     --bg-hex: #121212;
+    
+    /* Minecraft color codes */
+    --§0: #000000;
+    --§1: #0000AA;
+    --§2: #00AA00;
+    --§3: #00AAAA;
+    --§4: #AA0000;
+    --§5: #AA00AA;
+    --§6: #FFAA00;
+    --§7: #AAAAAA;
+    --§8: #555555;
+    --§9: #5555FF;
+    --§a: #55FF55;
+    --§b: #55FFFF;
+    --§c: #FF5555;
+    --§d: #FF55FF;
+    --§e: #FFFF55;
+    --§f: #FFFFFF;
 
     /* Header Logo */
     --logo: url(https://sky.shiiyu.moe/resources/img/logo_square.png?v2);
@@ -1652,7 +1670,7 @@ a.additional-player-stat:hover{
 }
 
 .stat-sea-creature-chance .stat-name, .color-sea-creature-chance{
-    color: #00AAAA;
+    color: var(--§3);
 }
 
 .stat-sea-creature-chance{
@@ -1819,7 +1837,7 @@ a.additional-player-stat:hover{
     user-select: none;
     cursor: pointer;
     transition: z-index .2s;
-    background-color: #555555;
+    background-color: var(--§8);
 }
 
 .piece::after{
@@ -1966,10 +1984,10 @@ a.additional-player-stat:hover{
 
 .piece-special-bg,
 .style-scrollbar .piece-special-bg + .item-lore::-webkit-scrollbar-thumb{
-    background-color: #FF5555;
+    background-color: var(--§c);
 }
 .piece-special-bg + .item-lore{
-    scrollbar-color: #FF5555 transparent;
+    scrollbar-color: var(--§c) transparent;
 }
 
 .piece-mythic-bg,
@@ -1990,18 +2008,18 @@ a.additional-player-stat:hover{
 
 .piece-epic-bg,
 .style-scrollbar .piece-epic-bg + .item-lore::-webkit-scrollbar-thumb{
-    background-color: #AA00AA;
+    background-color: var(--§5);
 }
 .piece-epic-bg + .item-lore{
-    scrollbar-color: #AA00AA transparent;
+    scrollbar-color: var(--§5) transparent;
 }
 
 .piece-rare-bg,
 .style-scrollbar .piece-rare-bg + .item-lore::-webkit-scrollbar-thumb{
-    background-color: #5555FF;
+    background-color: var(--§9);
 }
 .piece-rare-bg+.item-lore{
-    scrollbar-color: #5555FF transparent;
+    scrollbar-color: var(--§9) transparent;
 }
 
 .piece-uncommon-bg,
@@ -2014,14 +2032,14 @@ a.additional-player-stat:hover{
 
 .piece-common-bg,
 .style-scrollbar .piece-common-bg + .item-lore::-webkit-scrollbar-thumb{
-    background-color: #555555;
+    background-color: var(--§8);
 }
 .piece-common-bg + .item-lore{
-    scrollbar-color: #555555 transparent;
+    scrollbar-color: var(--§8) transparent;
 }
 
 .piece-special-fg{
-    color: #FF5555 !important;
+    color: var(--§c) !important;
 }
 
 .piece-mythic-fg{
@@ -2176,7 +2194,7 @@ a.additional-player-stat:hover{
 }
 
 .missing-pet{
-    background-color: #555555;
+    background-color: var(--§8);
     transition: background-color .2s;
 }
 
@@ -2194,7 +2212,7 @@ a.additional-player-stat:hover{
 }
 
 .missing-talisman{
-    background-color: #555555;
+    background-color: var(--§8);
     transition: background-color .2s;
 }
 
@@ -2204,7 +2222,7 @@ a.additional-player-stat:hover{
 }
 
 .missing-talisman:hover, .missing-talisman.sticky-stats{
-    background-color: #555555;
+    background-color: var(--§8);
 }
 
 .missing-talisman:hover .piece-icon, .missing-talisman.sticky-stats .piece-icon{
