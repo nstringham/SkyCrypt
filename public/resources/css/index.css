@@ -500,7 +500,6 @@ header > *{
 
 #packs_button,
 #themes_button {
-    display: inline-block;
     height: 36px;
     line-height: 36px;
     box-sizing: border-box;
