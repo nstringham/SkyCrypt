@@ -97,8 +97,7 @@ document.addEventListener('DOMContentLoaded', function(){
         let output = "";
 
         color = null
-        formats = {}
-        const formatCodes = ['k', 'l', 'm', 'n', 'o']
+        formats = new Set();
 
         for(part of text.match(/(§[0-9a-fk-or])*[^§]*/g)){
 
@@ -107,11 +106,11 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 if (/[0-9a-f]/.test(code)) {
                     color = code;
-                }else if (formatCodes.includes(code)){
-                    formats[code] = true;
+                }else if (/[k-o]/.test(code)){
+                    formats.add(code);
                 }else if (code === 'r'){
                     color = null;
-                    formats = {};
+                    formats.clear();
                 }
 
                 part = part.substring(2);
@@ -119,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
             if (part.length === 0) continue;
 
-            classes = formatCodes.filter(key => formats[key]).map(x => '§'+x)
+            classes = Array.from(formats).map(x => '§'+x)
 
             output += '<span';
             
