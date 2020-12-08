@@ -1700,14 +1700,6 @@ a.additional-player-stat:hover{
     color: var(--§3);
 }
 
-.stat-sea-creature-chance{
-    background-image: url(../img/icons/sea-creature-chance.png);
-}
-
-.stat-sea-creature-chance .stat-name, .color-sea-creature-chance{
-    color: #1CD2D2;
-}
-
 .stat-magic-find{
     background-image: url(../img/icons/magic-find.png);
 }
