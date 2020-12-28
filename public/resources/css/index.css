@@ -1239,10 +1239,16 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     line-height: normal;
 }
 
-#additional_player_stats{
+#additional_player_stats {
     font-size: 15px;
     margin-top: 10px;
     position: relative;
+    overflow: hidden;
+    padding-right: 30px;
+}
+
+#additional_player_stats:not(.socials-shown) {
+    height: 45px;
 }
 
 .additional-player-stat{
@@ -1275,32 +1281,25 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     cursor: pointer;
     font-weight: 700;
     font-size: 18px;
-    background-image: url(/resources/img/icons/chevron-right.png);
+    background-image: url(/resources/img/icons/chevron-down.png);
     background-position: center center;
     background-size: 24px 24px;
     background-repeat: no-repeat;
     user-select: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: 0;
+    transform: rotate(0deg);
+    transition: transform 0.15s ease-in-out;
 }
 
-#reveal_socials.socials-shown{
-    background-image: url(/resources/img/icons/chevron-left.png);
+.socials-shown #reveal_socials{
+    transform: rotate(180deg);
 }
 
 #reveal_socials::after{
     content: "";
-}
-
-#additional_socials{
-    display: inline-block;
-    transition: max-width .2s;
-}
-
-#additional_socials .additional-player-stat:not(#reveal_socials){
-    display: none;
-}
-
-#additional_socials.socials-shown .additional-player-stat{
-    display: inline-block !important;
 }
 
 .addition-player-stat::after{

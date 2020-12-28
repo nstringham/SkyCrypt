@@ -963,15 +963,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
     if(revealSocials){
         revealSocials.addEventListener('click', function(){
-            if(socialsShown){
-                socialsShown = false;
-                document.querySelector('#additional_socials').classList.remove('socials-shown');
-                document.querySelector('#reveal_socials').classList.remove('socials-shown');
-            }else{
-                socialsShown = true;
-                document.querySelector('#additional_socials').classList.add('socials-shown');
-                document.querySelector('#reveal_socials').classList.add('socials-shown');
-            }
+            socialsShown = !socialsShown;
+            document.querySelector('#additional_player_stats').classList.toggle('socials-shown', socialsShown);
         });
     }
 
