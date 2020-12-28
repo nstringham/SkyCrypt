@@ -2087,18 +2087,20 @@ a.additional-player-stat:hover{
     content: "";
 }
 
-.sub-extendable {
+
+.sub-extendable,
+.sub-floor-extendable {
     max-height: 50px;
     overflow: hidden;
 }
 
 .sub-floor-extendable {
     max-height: 30px;
-    overflow: hidden;
     margin-bottom: 4px;
 }
 
-.sub-extendable .stat-sub-header {
+.sub-extendable .stat-sub-header,
+.sub-floor-extendable .stat-sub-header {
     cursor: pointer;
     transition: color .2s;
 }
@@ -2107,30 +2109,14 @@ a.additional-player-stat:hover{
     margin-top: 12px;
     margin-bottom: 16px;
     font-size: 18px;
-    cursor: pointer;
-    transition: color .2s;
 }
 
-.sub-extendable .stat-sub-header:hover, .sub-extended .stat-sub-header {
-    color: rgba(255,255,255,1);
-}
-
+.sub-extendable .stat-sub-header:hover, .sub-extended .stat-sub-header,
 .sub-floor-extendable .stat-sub-header:hover, .sub-extended .stat-sub-header {
     color: rgba(255,255,255,1);
 }
 
-.sub-extendable .stat-sub-header::before {
-    content: "";
-    width: 24px;
-    height: 24px;
-    background-image: url(/resources/img/icons/chevron-down.png);
-    background-size: 24px 24px;
-    background-position: center;
-    background-repeat: no-repeat;
-    display: inline-block;
-    vertical-align: top;
-}
-
+.sub-extendable .stat-sub-header::before,
 .sub-floor-extendable .stat-sub-header::before {
     content: "";
     width: 24px;
@@ -2143,18 +2129,12 @@ a.additional-player-stat:hover{
     vertical-align: top;
 }
 
-.sub-extendable.sub-extended .stat-sub-header::before {
-    background-image: url(/resources/img/icons/chevron-up.png);
-}
-
+.sub-extendable.sub-extended .stat-sub-header::before,
 .sub-floor-extendable.sub-extended .stat-sub-header::before {
     background-image: url(/resources/img/icons/chevron-up.png);
 }
 
-.sub-extendable.sub-extended {
-    max-height: none;
-}
-
+.sub-extendable.sub-extended,
 .sub-floor-extendable.sub-extended {
     max-height: none;
 }
