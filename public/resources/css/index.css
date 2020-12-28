@@ -1239,8 +1239,11 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 }
 
 #additional_player_stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px 10px;
     font-size: 15px;
-    margin-top: 10px;
+    margin-top: 25px;
     position: relative;
     overflow: hidden;
     padding-right: 30px;
@@ -1249,19 +1252,17 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 @media (min-width: 825px){
     #additional_player_stats {
         transition: height 0.15s ease-in-out;
-        height: 90px;
+        height: 75px;
     }
 }
 
 #additional_player_stats:not(.socials-shown) {
-    height: 45px;
+    height: 30px;
 }
 
 .additional-player-stat{
     position: relative;
     padding: 0px 12px;
-    margin-right: 7px;
-    margin-top: 15px;
     height: 29px;
     line-height: 29px;
     box-sizing: border-box;
