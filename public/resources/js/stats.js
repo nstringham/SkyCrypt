@@ -959,12 +959,13 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     let socialsShown = false;
-    let revealSocials = document.querySelector('#reveal_socials');
+    const revealSocials = document.querySelector('#reveal_socials');
+    const additionalPlayerStats = document.querySelector('#additional_player_stats')
 
     if(revealSocials){
         revealSocials.addEventListener('click', function(){
             socialsShown = !socialsShown;
-            document.querySelector('#additional_player_stats').classList.toggle('socials-shown', socialsShown);
+            additionalPlayerStats.classList.toggle('socials-shown', socialsShown);
         });
     }
 
