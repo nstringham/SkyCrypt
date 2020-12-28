@@ -1246,6 +1246,13 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     padding-right: 30px;
 }
 
+@media (min-width: 825px){
+    #additional_player_stats {
+        transition: height 0.15s ease-in-out;
+        height: 90px;
+    }
+}
+
 #additional_player_stats:not(.socials-shown) {
     height: 45px;
 }
