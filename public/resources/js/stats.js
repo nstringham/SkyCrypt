@@ -962,12 +962,10 @@ document.addEventListener('DOMContentLoaded', function(){
     const revealSocials = document.querySelector('#reveal_socials');
     const additionalPlayerStats = document.querySelector('#additional_player_stats')
 
-    if(revealSocials){
-        revealSocials.addEventListener('click', function(){
-            socialsShown = !socialsShown;
-            additionalPlayerStats.classList.toggle('socials-shown', socialsShown);
-        });
-    }
+    revealSocials?.addEventListener('click', function(){
+        socialsShown = !socialsShown;
+        additionalPlayerStats.classList.toggle('socials-shown', socialsShown);
+    });
 
     let statContainers = document.querySelectorAll('.stat-container[data-stat]');
     let wrapperHeight = document.querySelector('#wrapper').offsetHeight;
