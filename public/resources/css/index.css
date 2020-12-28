@@ -2127,11 +2127,13 @@ a.additional-player-stat:hover{
     background-repeat: no-repeat;
     display: inline-block;
     vertical-align: top;
+    transform: scaleY(1);
+    transition: transform 0.05s ease-in-out;
 }
 
 .sub-extendable.sub-extended .stat-sub-header::before,
 .sub-floor-extendable.sub-extended .stat-sub-header::before {
-    background-image: url(/resources/img/icons/chevron-up.png);
+    transform: scaleY(-1);
 }
 
 .sub-extendable.sub-extended,
