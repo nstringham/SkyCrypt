@@ -2087,23 +2087,23 @@ a.additional-player-stat:hover{
     content: "";
 }
 
-.sub-extendable{
+.sub-extendable {
     max-height: 50px;
     overflow: hidden;
 }
 
-.sub-floor-extendable{
+.sub-floor-extendable {
     max-height: 30px;
     overflow: hidden;
     margin-bottom: 4px;
 }
 
-.sub-extendable .stat-sub-header{
+.sub-extendable .stat-sub-header {
     cursor: pointer;
     transition: color .2s;
 }
 
-.sub-floor-extendable .stat-sub-header{
+.sub-floor-extendable .stat-sub-header {
     margin-top: 12px;
     margin-bottom: 16px;
     font-size: 18px;
@@ -2111,15 +2111,15 @@ a.additional-player-stat:hover{
     transition: color .2s;
 }
 
-.sub-extendable .stat-sub-header:hover, .sub-extended .stat-sub-header{
+.sub-extendable .stat-sub-header:hover, .sub-extended .stat-sub-header {
     color: rgba(255,255,255,1);
 }
 
-.sub-floor-extendable .stat-sub-header:hover, .sub-extended .stat-sub-header{
+.sub-floor-extendable .stat-sub-header:hover, .sub-extended .stat-sub-header {
     color: rgba(255,255,255,1);
 }
 
-.sub-extendable .stat-sub-header::before{
+.sub-extendable .stat-sub-header::before {
     content: "";
     width: 24px;
     height: 24px;
@@ -2131,7 +2131,7 @@ a.additional-player-stat:hover{
     vertical-align: top;
 }
 
-.sub-floor-extendable .stat-sub-header::before{
+.sub-floor-extendable .stat-sub-header::before {
     content: "";
     width: 24px;
     height: 24px;
@@ -2143,19 +2143,19 @@ a.additional-player-stat:hover{
     vertical-align: top;
 }
 
-.sub-extendable.sub-extended .stat-sub-header::before{
+.sub-extendable.sub-extended .stat-sub-header::before {
     background-image: url(/resources/img/icons/chevron-up.png);
 }
 
-.sub-floor-extendable.sub-extended .stat-sub-header::before{
+.sub-floor-extendable.sub-extended .stat-sub-header::before {
     background-image: url(/resources/img/icons/chevron-up.png);
 }
 
-.sub-extendable.sub-extended{
+.sub-extendable.sub-extended {
     max-height: none;
 }
 
-.sub-floor-extendable.sub-extended{
+.sub-floor-extendable.sub-extended {
     max-height: none;
 }
 
