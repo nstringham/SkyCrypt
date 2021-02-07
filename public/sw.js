@@ -1,7 +1,7 @@
 // add arc.io
 importScripts('https://arc.io/arc-sw-core.js')
 
-const cacheName = "offline-v1";
+const cacheName = "offline-v2";
 
 const offlineResources = [
     '/resources/html/offline.html',
