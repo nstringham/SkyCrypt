@@ -220,7 +220,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
         let inventoryView = document.createElement('div');
         inventoryView.className = 'inventory-view processed';
-        inventoryView.setAttribute('data-inventory-type', type);
 
         let pagesize = 5 * 9;
 
