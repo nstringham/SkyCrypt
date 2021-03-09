@@ -1,3 +1,6 @@
+import { html, render, nothing } from 'https://unpkg.com/lit-html?module';
+import { classMap } from 'https://unpkg.com/lit-html/directives/class-map.js?module';
+import { styleMap } from 'https://unpkg.com/lit-html/directives/style-map.js?module';
 document.addEventListener('DOMContentLoaded', function(){
 
     const favoriteElement = document.querySelector('.favorite');
@@ -210,16 +213,8 @@ document.addEventListener('DOMContentLoaded', function(){
     let currentBackpack;
 
     function renderInventory(inventory, type){
-        let scrollTop = window.pageYOffset;
 
-        let visibleInventory = document.querySelector('.stat-inventory .inventory-view');
-
-        if(visibleInventory){
-            document.querySelector('#inventory_container').removeChild(visibleInventory);
-        }
-
-        let inventoryView = document.createElement('div');
-        inventoryView.className = 'inventory-view processed';
+        const visibleInventory = document.querySelector('.stat-inventory .inventory-view');
 
         let pagesize = 5 * 9;
 
@@ -230,60 +225,66 @@ document.addEventListener('DOMContentLoaded', function(){
             pagesize = 6 * 9;
         }
 
-        inventory.forEach(function(item, index){
-            let inventorySlot = document.createElement('div');
-            inventorySlot.className = 'inventory-slot';
+        const template = inventory.map((item, index) => {
+            const pieceClasses = { ['icon-' + item.id + '_' + item.Damage]: true};
+            const pieceStyles = {};
+            if (item.texture_path) {
+                pieceClasses['custom-icon'] = true;
+                pieceStyles.backgroundImage = 'url("' + item.texture_path + '")';
+            }
+            if (isEnchanted(item)) {
+                pieceClasses['is-enchanted'] = true;
+            }
 
-            if(item.id){
-                let inventoryItemIcon = document.createElement('div');
-                let inventoryItemCount = document.createElement('div');
-
-                inventoryItemIcon.className = 'piece-icon item-icon icon-' + item.id + '_' + item.Damage;
-
-                if(item.texture_path){
-                    inventoryItemIcon.className += ' custom-icon';
-                    inventoryItemIcon.style.backgroundImage = 'url("' +  item.texture_path + '")';
+            const itemInsides = html`
+                <div
+                    class="piece-icon item-icon ${classMap(pieceClasses)}"
+                    style=${styleMap(pieceStyles)}
+                ></div>
+                <div class="piece-hover-area"></div>
+                ${item.Count > 1
+                    ? html`<div class="item-count">${item.Count}</div>`
+                    : nothing
                 }
+            `;
 
-                if(isEnchanted(item))
-                    inventoryItemIcon.classList.add('is-enchanted');
-
-                inventoryItemCount.className = 'item-count';
-                inventoryItemCount.innerHTML = item.Count;
-
-                let inventoryItem = document.createElement('div');
-
-                let pieceHoverArea = document.createElement('div');
-                pieceHoverArea.className = 'piece-hover-area';
-
-                inventoryItem.className = 'rich-item inventory-item';
-
-                if(type === 'backpack')
-                    inventoryItem.setAttribute('data-backpack-item-index', index);
-                else
-                    inventoryItem.setAttribute('data-item-index', item.item_index);
-
-                inventoryItem.appendChild(inventoryItemIcon);
-                inventoryItem.appendChild(pieceHoverArea);
-
-                if(item.Count != 1)
-                    inventoryItem.appendChild(inventoryItemCount);
-
-                inventorySlot.appendChild(inventoryItem);
-
-                bindLoreEvents(pieceHoverArea);
-            }
-
-            if (index % pagesize === 0 && index !== 0) {
-                inventoryView.appendChild(document.createElement("hr"));
-            }
-
-            inventoryView.appendChild(inventorySlot);
+            return html`
+                ${index % pagesize === 0 && index !== 0
+                    ?html`<hr>`
+                    : nothing
+                }
+                <div class="inventory-slot">
+                    ${ item.id
+                        ? ( type === 'backpack'
+                            ? html`
+                                <div
+                                    class="rich-item inventory-item"
+                                    data-backpack-item-index=${index}
+                                >
+                                    ${itemInsides}
+                                </div>
+                            `
+                            : html`
+                                <div
+                                    class="rich-item inventory-item"
+                                    data-item-index=${item.item_index}
+                                >
+                                    ${itemInsides}
+                                </div>
+                            `
+                        )
+                        : nothing
+                    }
+                </div>
+            `;
         });
+        
+        render(template, visibleInventory);
 
-        inventoryContainer.appendChild(inventoryView);
+        [].forEach.call(visibleInventory.querySelectorAll('.piece-hover-area'), bindLoreEvents);
+        [].forEach.call(visibleInventory.querySelectorAll('.item-icon.is-enchanted'), handleEnchanted);
 
-        [].forEach.call(inventoryView.querySelectorAll('.item-icon.is-enchanted'), handleEnchanted);
+        let scrollTop = window.pageYOffset;
 
         window.scrollTo({
             top: scrollTop
