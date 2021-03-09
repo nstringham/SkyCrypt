@@ -298,6 +298,8 @@ document.addEventListener('DOMContentLoaded', function(){
             inventoryStatContainer.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }
 
+    renderInventory(items.inventory, 'inventory');
+
     function showBackpack(item){
         let activeInventory = document.querySelector('.inventory-tab.active-inventory');
 

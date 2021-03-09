@@ -881,18 +881,6 @@ const itemIcon = (item, classes) => { %>
     </div>
 <% };
 
-const inventorySlot = item => { %>
-    <div class="inventory-slot">
-        <% if(Object.keys(item).length > 2){ %>
-        <div class="rich-item inventory-item" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>">
-            <div class="piece-hover-area"></div>
-            <% itemIcon(item, ['piece-icon']); %>
-            <% if(item.Count != 1){ %><div class="item-count"><%= item.Count %></div><% } %>
-        </div>
-        <% } %>
-    </div>
-<% };
-
 const skill_component = (skill, icon, level, extra = {}) => { %>
     <div class="skill xp-skill<%= level.level == level.maxLevel ? ' maxed-skill' : ''%>">
         <div class="skill-icon" <% if(level.rank && level.rank < 50000){ %>
@@ -1724,16 +1712,7 @@ if(calculated.profile.game_mode == 'ironman'){
                                 </div>
                             </div>
                             <div class="inventory-view">
-                                <% for(let i = 9; i < items.inventory.length; i++){ %>
-                                    <% let item = items.inventory[i]; %>
-                                    <%= inventorySlot(item); %>
-
-                                <% } %>
-                                <hr>
-                                <% for(let i = 0; i < 9; i++){ %>
-                                    <% let item = items.inventory[i]; %>
-                                    <%= inventorySlot(item); %>
-                                <% } %>
+                                <div style="height: calc(var(--inventory-width) / 2);"></div>
                             </div>
                         </div>
                     <% } %>
