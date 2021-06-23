@@ -2,7 +2,8 @@
 import * as skinview3d from "../js/skinview3d.bundle.js";
 
 export class SkinViewerElement extends HTMLElement {
-  skinViewer: any;
+  readonly skinViewer: any;
+  readonly resizeObserver: ResizeObserver;
 
   constructor() {
     super();
@@ -58,11 +59,8 @@ export class SkinViewerElement extends HTMLElement {
       this.skinViewer.playerObject.cape.rotation.x = basicCapeRotationX;
     }
 
-    this.resize();
-
-    window.addEventListener("resize", this.resize);
-
-    console.log("done");
+    this.resizeObserver = new ResizeObserver(() => this.resize());
+    this.resizeObserver.observe(this);
   }
 
   private resize() {
