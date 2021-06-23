@@ -60,7 +60,9 @@ export class SkinViewerElement extends HTMLElement {
       this.skinViewer.playerObject.cape.rotation.x = basicCapeRotationX;
     }
 
-    this.resizeObserver = new ResizeObserver(() => this.resize());
+    this.resizeObserver = new ResizeObserver(([entry]) =>
+      this.resize(entry.contentRect.width, entry.contentRect.height)
+    );
     this.resizeObserver.observe(this);
 
     const styleElement = document.createElement("style");
@@ -75,11 +77,11 @@ export class SkinViewerElement extends HTMLElement {
     this.shadowRoot?.appendChild(styleElement);
   }
 
-  private resize() {
-    if (this.offsetWidth / this.offsetHeight < 0.5) {
-      this.skinViewer.setSize(this.offsetWidth, this.offsetWidth * 2);
+  private resize(width: number, height: number) {
+    if (width / height < 0.5) {
+      this.skinViewer.setSize(width, width * 2);
     } else {
-      this.skinViewer.setSize(this.offsetHeight / 2, this.offsetHeight);
+      this.skinViewer.setSize(height / 2, height);
     }
   }
 }
