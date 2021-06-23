@@ -825,30 +825,22 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 #skin_display {
-  position: fixed;
-  top: 20vh;
-  left: 0;
-  width: 30vw;
-  bottom: 5vh;
-}
-
-#skin_display_mobile {
-  grid-area: skin;
-  position: relative;
-  width: 100%;
-  display: none;
-
+  display: contents;
   #player_model {
-    right: 20%;
+    position: fixed;
+    top: 20vh;
+    left: 0;
+    width: 30vw;
+    bottom: 5vh;
   }
 }
 
-#player_model {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+#skin_display_mobile {
+  display: contents;
+  #player_model {
+    grid-area: skin;
+    margin-right: var(--padding);
+  }
 }
 
 .expander {
@@ -3477,14 +3469,6 @@ body {
     margin-right: auto;
     margin-left: auto;
   }
-
-  #skin_display {
-    display: none;
-  }
-
-  #skin_display_mobile {
-    display: initial;
-  }
 }
 
 @media (max-width: 1200px) {
@@ -3614,8 +3598,8 @@ body {
   }
 
   #skin_display_mobile #player_model {
-    left: 10%;
-    right: 10%;
+    margin-left: 10%;
+    margin-right: 10%;
   }
 
   .info-container-wrapper {
