@@ -19,7 +19,8 @@ export class SkinViewerElement extends HTMLElement {
           : "/cape/" + calculated.display_name,
     });
 
-    this.appendChild(this.skinViewer.canvas);
+    this.attachShadow({ mode: "open" });
+    this.shadowRoot?.appendChild(this.skinViewer.canvas);
 
     this.skinViewer.camera.position.set(-18, -3, 58);
 
@@ -61,10 +62,21 @@ export class SkinViewerElement extends HTMLElement {
 
     this.resizeObserver = new ResizeObserver(() => this.resize());
     this.resizeObserver.observe(this);
+
+    const styleElement = document.createElement("style");
+
+    styleElement.textContent = /*css*/ `
+      :host {
+        display: grid;
+        place-items: center;
+      }
+    `;
+
+    this.shadowRoot?.appendChild(styleElement);
   }
 
   private resize() {
-    if (this.offsetWidth / this.offsetHeight < 0.6) {
+    if (this.offsetWidth / this.offsetHeight < 0.5) {
       this.skinViewer.setSize(this.offsetWidth, this.offsetWidth * 2);
     } else {
       this.skinViewer.setSize(this.offsetHeight / 2, this.offsetHeight);
