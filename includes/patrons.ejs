@@ -1,8 +1,0 @@
-<%
-  const patrons = [
-    "Who knows?"
-  ];
-%>
-<%-
-  patrons.map(patron =>/*html*/`<a href="/stats/${ _.escape(patron) }"><span class="patron piece-legendary-fg">${ _.escape(patron) }</span></a>`).join(", ")
-%>

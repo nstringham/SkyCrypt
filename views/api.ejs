@@ -8,10 +8,10 @@
   <meta property="og:title" content="SkyCrypt">
   <meta property="og:description" content="A beautiful site for sharing your SkyBlock profile 🍣">
 
-  <%- include('../includes/resources') %>
+  <%- resources %>
 </head>
   <body>
-    <%- include('../includes/header') %>
+    <%- header %>
 
     <!-- Redoc Library-->
     <redoc id="docs"></redoc>
@@ -38,6 +38,6 @@
       document.querySelector('#themes-box').addEventListener("change", () => setTimeout(redocInit));
     </script>
 
-    <%- include('../includes/footer'); %>
+    <%- footer %>
   </body>
 </html>

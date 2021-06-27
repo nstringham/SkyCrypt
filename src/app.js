@@ -3,6 +3,10 @@ const lib = require("./lib");
 const { getFileHashes, getFileHash, hashedDirectories } = require("./hashes");
 const fetch = require("node-fetch");
 
+const { render: renderFooter } = require("../includes/footer.js");
+const { render: renderHeader } = require("../includes/header.js");
+const { render: renderResources } = require("../includes/resources.js");
+
 async function main() {
   const express = require("express");
   const session = require("express-session");
@@ -238,50 +242,54 @@ async function main() {
         process.send({ type: "selected_pack", id: req.cookies.pack });
       }
 
-      res.render(
-        "stats",
-        {
-          req,
-          items,
-          calculated,
-          _,
-          constants,
-          helper,
-          extra: await getExtra("stats", favorites, cacheOnly),
-          fileHashes,
-          page: "stats",
-        },
-        (err, html) => {
-          if (err) console.error(err);
-          else console.debug(`${debugId}: page succesfully rendered. (${new Date().getTime() - renderStart}ms)`);
+      const options = {
+        req,
+        items,
+        calculated,
+        _,
+        constants,
+        helper,
+        extra: await getExtra("stats", favorites, cacheOnly),
+        fileHashes,
+        page: "stats",
+      };
 
-          res.set("X-Debug-ID", `${debugId}`);
-          res.set("X-Process-Time", `${new Date().getTime() - timeStarted}`);
-          res.send(html);
-        }
-      );
+      options.footer = renderFooter(options);
+      options.header = renderHeader(options);
+      options.resources = renderResources(options);
+
+      res.render("stats", options, (err, html) => {
+        if (err) console.error(err);
+        else console.debug(`${debugId}: page succesfully rendered. (${new Date().getTime() - renderStart}ms)`);
+
+        res.set("X-Debug-ID", `${debugId}`);
+        res.set("X-Process-Time", `${new Date().getTime() - timeStarted}`);
+        res.send(html);
+      });
     } catch (e) {
       console.debug(`${debugId}: an error has occured.`);
       console.error(e);
 
-      res.render(
-        "index",
-        {
-          req,
-          error: e,
-          player: playerUsername,
-          extra: await getExtra("index", favorites, cacheOnly),
-          fileHashes,
-          _,
-          helper,
-          page: "index",
-        },
-        (err, html) => {
-          res.set("X-Debug-ID", `${debugId}`);
-          res.set("X-Process-Time", `${new Date().getTime() - timeStarted}`);
-          res.send(html);
-        }
-      );
+      const options = {
+        req,
+        error: e,
+        player: playerUsername,
+        extra: await getExtra("index", favorites, cacheOnly),
+        fileHashes,
+        _,
+        helper,
+        page: "index",
+      };
+
+      options.footer = renderFooter(options);
+      options.header = renderHeader(options);
+      options.resources = renderResources(options);
+
+      res.render("index", options, (err, html) => {
+        res.set("X-Debug-ID", `${debugId}`);
+        res.set("X-Process-Time", `${new Date().getTime() - timeStarted}`);
+        res.send(html);
+      });
 
       return false;
     }
@@ -567,14 +575,16 @@ async function main() {
   });
 
   app.all("/api", async (req, res, next) => {
-    res.render(
-      "api",
-      { error: null, player: null, extra: await getExtra("api"), fileHashes, _, helper, page: "api" },
-      (err, html) => {
-        res.set("X-Cluster-ID", `${helper.getClusterId()}`);
-        res.send(html);
-      }
-    );
+    const options = { error: null, player: null, extra: await getExtra("api"), fileHashes, _, helper, page: "api" };
+
+    options.footer = renderFooter(options);
+    options.header = renderHeader(options);
+    options.resources = renderResources(options);
+
+    res.render("api", options, (err, html) => {
+      res.set("X-Cluster-ID", `${helper.getClusterId()}`);
+      res.send(html);
+    });
   });
 
   app.all("/:player/:profile?", async (req, res, next) => {
@@ -586,24 +596,26 @@ async function main() {
     const favorites = parseFavorites(req.cookies.favorite);
     const cacheOnly = req.query.cache === "true" || forceCacheOnly;
 
-    res.render(
-      "index",
-      {
-        req,
-        error: null,
-        player: null,
-        extra: await getExtra("index", favorites, cacheOnly),
-        fileHashes,
-        _,
-        helper,
-        page: "index",
-      },
-      (err, html) => {
-        res.set("X-Cluster-ID", `${helper.getClusterId()}`);
-        res.set("X-Process-Time", `${new Date().getTime() - timeStarted}`);
-        res.send(html);
-      }
-    );
+    const options = {
+      req,
+      error: null,
+      player: null,
+      extra: await getExtra("index", favorites, cacheOnly),
+      fileHashes,
+      _,
+      helper,
+      page: "index",
+    };
+
+    options.footer = renderFooter(options);
+    options.header = renderHeader(options);
+    options.resources = renderResources(options);
+
+    res.render("index", options, (err, html) => {
+      res.set("X-Cluster-ID", `${helper.getClusterId()}`);
+      res.set("X-Process-Time", `${new Date().getTime() - timeStarted}`);
+      res.send(html);
+    });
   });
 
   app.all("*", async (req, res, next) => {

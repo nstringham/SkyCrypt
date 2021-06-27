@@ -9,11 +9,11 @@
   <meta property="og:image" content="/resources/img/logo_square.svg">
   <meta property="og:title" content="SkyBlock Stats">
   <meta property="og:description" content="<%= description %>">
-<%- include('../includes/resources') %>
+<%- resources %>
   <link rel="prefetch" href="/resources/img/inventory/items.webp?v14">
 </head>
   <body class="page-index">
-    <%- include('../includes/header') %>
+    <%- header %>
     <main class="grid">
       <form class="lookup-player">
         <p>Show SkyBlock stats for</p>
@@ -141,7 +141,7 @@
 
       <% } %>
     </main>
-    <%- include('../includes/footer'); %>
+    <%- footer %>
     <script>
       <% if(error){ %>
         console.log("An error occured with message: \"<%= error %>\"");
