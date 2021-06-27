@@ -1,3 +1,4 @@
+<%- /*html*/`
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,10 +9,10 @@
   <meta property="og:title" content="SkyCrypt">
   <meta property="og:description" content="A beautiful site for sharing your SkyBlock profile 🍣">
 
-  <%- resources %>
+  ${ resources }
 </head>
   <body>
-    <%- header %>
+    ${ header }
 
     <!-- Redoc Library-->
     <redoc id="docs"></redoc>
@@ -38,6 +39,7 @@
       document.querySelector('#themes-box').addEventListener("change", () => setTimeout(redocInit));
     </script>
 
-    <%- footer %>
+    ${ footer }
   </body>
 </html>
+` %>
