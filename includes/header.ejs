@@ -1,4 +1,14 @@
-<script src="/resources/js/common.js?<%- fileHashes.js['common.js'] %>"></script>
+<%
+  const defaultPack = {
+    name: "Default",
+    author: "Various Artists",
+    basePath: "/resources/img",
+    url: "",
+    id: null
+  }
+%>
+<%- /*html*/`
+<script src="/resources/js/common.js?${fileHashes.js['common.js']}"></script>
 <header>
   <div data-tippy-content="Supporting LGBTQ+ rights all around the year! ❤️<br><br>Click for a surprise. :)" class="pride-flag logo"></div>
   <a href="/" id="site_name">SkyCrypt</a>
@@ -28,9 +38,11 @@
   </div>
 
   <a href="/api" style="text-decoration: none;" class="social-button" id="api_button">API</a>
-  <% if('donations' in extra){ %>
-    <a title="Patreon" target="_blank" rel="noreferrer" href="https://patreon.com/shiiyu" class="social-button patreon"><span><%= extra.donations.patreon %> Patrons</span><div class="social-icon"></div></a>
-  <% } %>
+  ${
+    'donations' in extra
+    ? /*html*/`<a title="Patreon" target="_blank" rel="noreferrer" href="https://patreon.com/shiiyu" class="social-button patreon"><span>${_.escape(extra.donations.patreon)} Patrons</span><div class="social-icon"></div></a>`
+    : ""
+  }
   <form class="lookup-player">
     <input name="ign" type="search" enterkeyhint="go" placeholder="Enter username" aria-label="username" required>
     <button type="submit">
@@ -48,19 +60,19 @@
     <span>Themes</span>
   </button>
   <div id="themes-box" class="expandable list">
-    <% for(const theme_id in extra.themes){
-      const theme = extra.themes[theme_id];
-      if(theme.hidden) continue; %>
-    <label class="list-item">
-      <% const icon = '/resources/img/logo_square.svg' + (theme.colors?.logo?.replace('#', '?color=') ?? '') + (theme.light ? '&invert' : ''); %>
-      <img class="icon" src="<%= icon %>" alt="" loading="lazy">
-      <span class="name"><%= theme.name %></span>
-      <div class="author">by <span><%= theme.author %></span></div>
-      <input type="radio" name="theme" value="<%= theme_id %>">
-    </label>
-    <% } %>
+    ${Object.entries(extra.themes).filter(([theme_id, theme]) => !theme.hidden).map(([theme_id, theme]) => {
+      const icon = '/resources/img/logo_square.svg' + (theme.colors?.logo?.replace('#', '?color=') ?? '') + (theme.light ? '&invert' : '');
+      return /*html*/`
+        <label class="list-item">
+          <img class="icon" src="${ _.escape(icon) }" alt="" loading="lazy">
+          <span class="name">${ _.escape(theme.name) }</span>
+          <div class="author">by <span>${ _.escape(theme.author) }</span></div>
+          <input type="radio" name="theme" value="${ _.escape(theme_id) }">
+        </label>
+      `;
+    }).join("")}
   </div>
-  <% if (page != 'api') { %>
+  ${ page != 'api' ? /*html*/`
     <button id="packs-button" class="expander" aria-expanded="false">
       <svg viewBox="0 0 24 24">
         <path fill="currentColor" d="M2,10.96C1.5,10.68 1.35,10.07 1.63,9.59L3.13,7C3.24,6.8 3.41,6.66 3.6,6.58L11.43,2.18C11.59,2.06 11.79,2 12,2C12.21,2 12.41,2.06 12.57,2.18L20.47,6.62C20.66,6.72 20.82,6.88 20.91,7.08L22.36,9.6C22.64,10.08 22.47,10.69 22,10.96L21,11.54V16.5C21,16.88 20.79,17.21 20.47,17.38L12.57,21.82C12.41,21.94 12.21,22 12,22C11.79,22 11.59,21.94 11.43,21.82L3.53,17.38C3.21,17.21 3,16.88 3,16.5V10.96C2.7,11.13 2.32,11.14 2,10.96M12,4.15V4.15L12,10.85V10.85L17.96,7.5L12,4.15M5,15.91L11,19.29V12.58L5,9.21V15.91M19,15.91V12.69L14,15.59C13.67,15.77 13.3,15.76 13,15.6V19.29L19,15.91M13.85,13.36L20.13,9.73L19.55,8.72L13.27,12.35L13.85,13.36Z" />
@@ -74,35 +86,26 @@
       </script>
     </button>
     <div id="packs-box" class="expandable list">
-      <%
-        const defaultPack = {
-          name: "Default",
-          author: "Various Artists",
-          basePath: "/resources/img",
-          url: "",
-          id: null
-        }
-      %>
-      <% for(const pack of [defaultPack, ...extra.packs].filter(a => !a.hidden)) { %>
+      ${[defaultPack, ...extra.packs].filter(a => !a.hidden).map(pack => /*html*/`
         <label class="list-item">
-          <img class="icon pack-icon" src="<%= pack.basePath + '/pack.png' %>" alt="" loading="lazy">
-          <a class="name" href="<%= pack.url %>" target="_blank" rel="noreferrer"><%= pack.name %> <% if(pack.version){ %><small><%= pack.version %></small><% } %></a><br>
-          <div class="author">by <span><%= pack.author %></span></div>
+          <img class="icon pack-icon" src="${ _.escape(pack.basePath + '/pack.png') }" alt="" loading="lazy">
+          <a class="name" href="${ _.escape(pack.url) }" target="_blank" rel="noreferrer">${ _.escape(pack.name) }${ pack.version ? /*html*/`<small>${ _.escape(pack.version) }</small>` : ""}</a><br>
+          <div class="author">by <span>${ _.escape(pack.author) }</span></div>
           <button
             name="pack"
-            value="<%= pack.id %>"
-            <% if (pack.disabled) { %>
-              title="Disabled due to unknown issues."
-              disabled
-            <% } else if (req.cookies.pack == pack.id) { %>
-              aria-selected
-              disabled
-            <% } %>
+            value="${ _.escape(pack.id) }"
+            ${
+              pack.disabled
+              ? `disabled title="Disabled due to unknown issues."`
+              : req.cookies.pack == pack.id
+                ? `disabled aria-selected`
+                : ""
+            }
           ></button>
         </label>
-      <% } %>
+      `).join("")}
     </div>
-  <% } %>
+  ` : "" }
 </header>
 <noscript style="
   position: fixed;
@@ -115,5 +118,6 @@
 ">
   please enable JavaScript!
 </noscript>
+` %>
 
 

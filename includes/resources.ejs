@@ -1,4 +1,4 @@
-
+<%- /*html*/`
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
   <meta property="og:site_name" content="SkyCrypt">
@@ -18,7 +18,7 @@
   <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhoneX.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
   <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhone8Plus.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)">
   <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhone8.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
-  <link rel="stylesheet" href="/resources/css/index.css?<%- fileHashes.css['index.css'] %> ">
+  <link rel="stylesheet" href="/resources/css/index.css?${ fileHashes.css['index.css'] }">
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-185827357-1"></script>
   <script>
@@ -32,7 +32,7 @@
 
   <script>
     const stylesheets = [
-      "/resources/css/inventory.css?<%- fileHashes.css['inventory.css'] %>",
+      "/resources/css/inventory.css?${ fileHashes.css['inventory.css'] }",
       "https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap"
     ];
 
@@ -44,12 +44,13 @@
     });
   </script>
 
-  <% if(page == 'stats'){ %>
-    <script async module src="/resources/js/localTimeElement.mjs?<%- fileHashes.js['localTimeElement.mjs'] %>"></script>
-    <script defer src="/resources/js/stats-defer.js?<%- fileHashes.js['stats-defer.js'] %>"></script>
-  <% } %>
+  ${ page == 'stats' ? /*html*/`
+    <script async module src="/resources/js/localTimeElement.mjs?${ fileHashes.js['localTimeElement.mjs'] }"></script>
+    <script defer src="/resources/js/stats-defer.js?${ fileHashes.js['stats-defer.js'] }"></script>
+  ` : "" }
 
-  <script defer src="/resources/js/common-defer.js?<%- fileHashes.js['common-defer.js'] %>"></script>
+  <script defer src="/resources/js/common-defer.js?${ fileHashes.js['common-defer.js'] }"></script>
 
-  <script> const page = "<%- page %>"; </script>
-  <script> const extra = JSON.parse(`<%- JSON.stringify(extra).replace(/\\/g, '\\\\') %>`); </script>
+  <script> const page = "${ page }"; </script>
+  <script> const extra = JSON.parse(\`${ JSON.stringify(extra).replace(/\\/g, '\\\\') }\`); </script>
+` %>

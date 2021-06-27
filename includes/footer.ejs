@@ -1,7 +1,8 @@
+<%- /*html*/`
 <script src="https://unpkg.com/popper.js@1"></script>
 <script src="https://unpkg.com/tippy.js@5"></script>
 <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
-<script src="/resources/js/skinview3d.bundle.js?<%- fileHashes.js['skinview3d.bundle.js'] %>"></script>
+<script src="/resources/js/skinview3d.bundle.js?${fileHashes.js['skinview3d.bundle.js']}"></script>
 <script async src="https://arc.io/widget.min.js#oNMq8LVU"></script>
 
 <script>
@@ -19,20 +20,27 @@
   });
 </script>
 
-<% if (extra.isFoolsDay) { %>
-  <style>
-    #player_model {
-      transform: scaleY(-1);
-    }
-    .profile-avatar {
-      transition: transform 0.2s ease-in-out;
-    }
-    :hover > .profile-avatar {
-      transform: rotate(180deg);
-    }
-  </style>
-<% } %>
+${
+  extra.isFoolsDay
+  ? /*html*/`
+    <style>
+      #player_model {
+        transform: scaleY(-1);
+      }
+      .profile-avatar {
+        transition: transform 0.2s ease-in-out;
+      }
+      :hover > .profile-avatar {
+        transform: rotate(180deg);
+      }
+    </style>
+  `
+  : ""
+ }
 
-<% if(page == 'api'){ %>
-  <link rel="stylesheet" href="/resources/css/api.css?<%- fileHashes.css['api.css'] %>">
-<% } %>
+${
+  page == 'api'
+  ? /*html*/`<link rel="stylesheet" href="/resources/css/api.css?${fileHashes.css['api.css']}">`
+  : ""
+}
+` %>

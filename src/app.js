@@ -272,6 +272,7 @@ async function main() {
           player: playerUsername,
           extra: await getExtra("index", favorites, cacheOnly),
           fileHashes,
+          _,
           helper,
           page: "index",
         },
@@ -568,7 +569,7 @@ async function main() {
   app.all("/api", async (req, res, next) => {
     res.render(
       "api",
-      { error: null, player: null, extra: await getExtra("api"), fileHashes, helper, page: "api" },
+      { error: null, player: null, extra: await getExtra("api"), fileHashes, _, helper, page: "api" },
       (err, html) => {
         res.set("X-Cluster-ID", `${helper.getClusterId()}`);
         res.send(html);
@@ -593,6 +594,7 @@ async function main() {
         player: null,
         extra: await getExtra("index", favorites, cacheOnly),
         fileHashes,
+        _,
         helper,
         page: "index",
       },
