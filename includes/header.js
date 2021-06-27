@@ -1,4 +1,4 @@
-const { escape } = require("lodash");
+const { escape: esc } = require("lodash");
 
 const defaultPack = {
   name: "Default",
@@ -49,7 +49,7 @@ function render({ page, fileHashes, extra, req }) {
     "donations" in extra
       ? /*html*/ `
         <a title="Patreon" target="_blank" rel="noreferrer" href="https://patreon.com/shiiyu" class="social-button patreon">
-          <span>${escape(extra.donations.patreon)} Patrons</span>
+          <span>${esc(extra.donations.patreon)} Patrons</span>
           <div class="social-icon"></div>
         </a>
       `
@@ -81,10 +81,10 @@ function render({ page, fileHashes, extra, req }) {
           (theme.light ? "&invert" : "");
         return /*html*/ `
         <label class="list-item">
-          <img class="icon" src="${escape(icon)}" alt="" loading="lazy">
-          <span class="name">${escape(theme.name)}</span>
-          <div class="author">by <span>${escape(theme.author)}</span></div>
-          <input type="radio" name="theme" value="${escape(theme_id)}">
+          <img class="icon" src="${esc(icon)}" alt="" loading="lazy">
+          <span class="name">${esc(theme.name)}</span>
+          <div class="author">by <span>${esc(theme.author)}</span></div>
+          <input type="radio" name="theme" value="${esc(theme_id)}">
         </label>
       `;
       })
@@ -111,14 +111,14 @@ function render({ page, fileHashes, extra, req }) {
             .map(
               (pack) => /*html*/ `
                 <label class="list-item">
-                  <img class="icon pack-icon" src="${escape(pack.basePath + "/pack.png")}" alt="" loading="lazy">
-                  <a class="name" href="${escape(pack.url)}" target="_blank" rel="noreferrer">
-                    ${escape(pack.name)}${pack.version ? /*html*/ `<small>${escape(pack.version)}</small>` : ""}
+                  <img class="icon pack-icon" src="${esc(pack.basePath + "/pack.png")}" alt="" loading="lazy">
+                  <a class="name" href="${esc(pack.url)}" target="_blank" rel="noreferrer">
+                    ${esc(pack.name)}${pack.version ? /*html*/ `<small>${esc(pack.version)}</small>` : ""}
                   </a><br>
-                  <div class="author">by <span>${escape(pack.author)}</span></div>
+                  <div class="author">by <span>${esc(pack.author)}</span></div>
                   <button
                     name="pack"
-                    value="${escape(pack.id)}"
+                    value="${esc(pack.id)}"
                     ${
                       pack.disabled
                         ? `disabled title="Disabled due to unknown issues."`
