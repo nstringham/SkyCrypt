@@ -1,7 +1,14 @@
 <%
   const description = "A beautiful site for sharing your SkyBlock profile 🍣"
 
-  const developerRoles = {
+  const lessPlayedGames = [
+    'Smash Heroes',
+    'Turbo Kart Racers',
+    'Quakecraft',
+    'Warlords'
+  ]
+
+  const profileTypes = {
     MAINTAINER: {
       svgPath: /* mdi-xml */ "M12.89,3L14.85,3.4L11.11,21L9.15,20.6L12.89,3M19.59,12L16,8.41V5.58L22.42,12L16,18.41V15.58L19.59,12M1.58,12L8,5.58V8.41L4.41,12L8,15.58V18.41L1.58,12Z",
       title: "SkyCrypt Maintainer"
@@ -17,15 +24,13 @@
     ERROR: {
       svgPath: /* mdi-alert-circle */ "M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z",
       title: "Error"
+    },
+    FAVORITE: {
+      svgPath: /* mdi-star */ "M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z",
+      title: "Favorited Profile"
     }
   }
 
-  const lessPlayedGames = [
-    'Smash Heroes',
-    'Turbo Kart Racers',
-    'Quakecraft',
-    'Warlords'
-  ]
 %>
 <%- /*html*/`
 <!DOCTYPE html>
@@ -91,69 +96,65 @@
         <div class="external-app-description">A simple way to get informed about current undergoings in SkyCrypt with suggestions, bug reports and support.</div>
         <div class="external-app-description" style="opacity:0.6">Also try out ${ _.escape(lessPlayedGames[Math.floor(Math.random() * lessPlayedGames.length)] )}, is a fun game!</div>
       </a>
-      ` %>
-      <%
-        if(extra.favorites?.length){
-          for(let profile of extra.favorites){
-            if(profile.error) continue;
-            const lastUpdated = profile.last_updated;
-            let lastUpdatedText = "";
-            const diff = (+new Date() - lastUpdated) / 1000;
-            if(diff < 10 * 60)
-              lastUpdatedText = `<span class="stat-value">Currently online</span>`;
-            else
-              lastUpdatedText = `<span class="stat-name">Last online: </span><span class="stat-value">${moment(lastUpdated).fromNow()}</span>`;
-            %>
-              <a href="/stats/<%=profile.uuid %>" class="top-profile">
-                <img src="https://crafatar.com/avatars/<%=extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
-                <div class="profile-name">
-                  <%=profile.username %>
-                  <% if('emojiImg' in profile){ %>
-                    <%- /*html*/`<img class="emoji" draggable="false" src="${ _.escape(profile.emojiImg )}" alt="${ _.escape(profile.emojiImg.split('/').pop().split('.')[0] )}">` %>
-                  <% }else if('emoji' in profile){ %>
-                    <%- /*html*/`${" " + extra.twemoji.parse(profile.emoji) }` %>
-                  <% } %>
-                </div>
-                <div class="profile-last-online"><%- lastUpdatedText %></div>
-                <svg class="profile-rank" viewBox="0 0 24 24">
-                  <title>Favorited profile</title>
-                  <!-- mdi-star -->
-                  <path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
-                </svg>
-              </a>
-            <%
+      ${
+        !extra.favorites?.length
+        ? /*html*/`
+          <span class="top-profile">
+            <img src="/resources/img/icons/q.png" class="profile-avatar" alt="">
+            <div class="profile-name">No favorites set!</div>
+            <div class="profile-last-online">Why don't you set a favorite?</div>
+          </span>
+        `
+        : ""
+      }
+      ${
+        [...extra.favorites.filter(profile=>!profile.error), ...extra.devs].map((profile) => {
+          let subtitle;
+          if ("message" in profile) {
+            subtitle = extra.twemoji.parse(profile.message);
+          } else {
+            const diff = (+new Date() - profile.last_updated) / 1000;
+            if (diff < 10 * 60) {
+              subtitle = /*html*/`<span class="stat-value">Currently online</span>`;
+            } else {
+              subtitle = /*html*/`<span class="stat-name">Last online: </span><span class="stat-value">${moment(profile.last_updated).fromNow()}</span>`;
+            }
           }
-        } else {
-          %>
-            <span class="top-profile">
-              <img src="/resources/img/icons/q.png" class="profile-avatar" alt="">
-              <div class="profile-name">No favorites set!</div>
-              <div class="profile-last-online">Why don't you set a favorite?</div>
-            </span>
-          <%
-        }
-      %>
 
-      <% for(const profile of extra.devs){ %>
-        <a href="/stats/<%= profile.uuid %>" class="top-profile">
-          <img src="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
-          <div class="profile-name">
-            <%= profile.username %>
-            <% if('emojiImg' in profile){ %>
-              <img class="emoji" draggable="false" src="<%= profile.emojiImg %>" alt="<%= profile.emojiImg.split('/').pop().split('.')[0] %>">
-            <% }else if('emoji' in profile){ %>
-              <%- extra.twemoji.parse(profile.emoji) %>
-            <% } %>
-          </div>
-          <div class="profile-last-online"><%- extra.twemoji.parse(profile.message) %></div>
-          <svg class="profile-rank" viewBox="0 0 24 24">
-            <title><%= developerRoles[profile.type]?.title || developerRoles.ERROR.title %></title>
-            <path fill="currentColor" d="<%= developerRoles[profile.type]?.svgPath || developerRoles.ERROR.svgPath %>" />
-          </svg>
-        </a>
+          let emoji
+          if ('emojiImg' in profile) {
+            emoji = /*html*/`<img class="emoji" draggable="false" src="${_.escape(profile.emojiImg)}" alt="${_.escape(profile.emojiImg.split('/').pop().split('.')[0])}">`;
+          } else if ('emoji' in profile) {
+            emoji = extra.twemoji.parse(profile.emoji)
+          }
 
-      <% } %>
-      <%- /*html*/`
+          let type
+          if ("type" in profile) {
+            if (profile.type in profileTypes) {
+              type = profile.type
+            } else {
+              type = "ERROR"
+            }
+          } else {
+            type = "FAVORITE"
+          }
+
+          return /*html*/`
+            <a href="/stats/${profile.uuid}" class="top-profile">
+              <img src="https://crafatar.com/avatars/${ extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : profile.uuid }?size=8&overlay" class="profile-avatar" alt="">
+              <div class="profile-name">
+                ${profile.username}
+                ${emoji ?? ""}
+              </div>
+              <div class="profile-last-online">${subtitle}</div>
+              <svg class="profile-rank" viewBox="0 0 24 24">
+                <title>${profileTypes[type].title}</title>
+                <path fill="currentColor" d="${profileTypes[type].svgPath}" />
+              </svg>
+            </a>
+          `;
+        }).join("")
+      }
     </main>
     ${ footer }
     <script>
