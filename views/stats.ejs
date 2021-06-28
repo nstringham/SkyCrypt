@@ -1771,7 +1771,7 @@ const getRarityUpgradeClass = item => {
             <% } %>
             "><span class="stat-name">Total Slayer XP: </span><span class="stat-value"><%= calculated.slayer_xp.toLocaleString() %></span></span>
           </p>
-          <div class="slayer-containers narrow-info-container-wrapper">
+          <div class="slayer-containers narrow-info-container-wrapper" data-num-slayers="<%= Object.entries(calculated.slayers).filter(([key,slayer]) => slayer.xp).length %>">
           <%
           let maxSlayerLevel = 0;
 
