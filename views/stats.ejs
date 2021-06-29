@@ -1,4 +1,6 @@
 <%
+const { escape: esc } = _;
+
 const rarityOrder = ['special', 'supreme', 'mythic', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
 const slayerOrder = ['zombie', 'spider', 'wolf', 'enderman'];
 const badgeOrder = ['gold', 'silver', 'bronze'];
@@ -291,65 +293,86 @@ const isEnchanted = item => {
 
 };
 
-const itemIcon = (item, classes) => { %>
-  <div
-    <% if(item.texture_path){ %> style='background-image: url("<%= item.texture_path %>")' <% } %>
-    class="<%= classes.join(" ") %> item-icon <% if(isEnchanted(item)){ %>is-enchanted <% } %> <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
-  </div>
-<% };
+const itemIcon = (item, classes) => {
+    classes.push("item-icon");
+  if (isEnchanted(item)) {
+    classes.push("is-enchanted");
+  }
+  if (item.texture_path) {
+    classes.push("custom-icon");
+    return /*html*/`
+      <div style='background-image: url("${esc(item.texture_path)}")' class="${esc(classes.join(" "))}"></div>
+    `;
+  } else {
+    classes.push(`icon-${item.id}_${item.Damage}`);
+    return /*html*/`
+      <div class="${esc(classes.join(" "))}"></div>
+    `;
+  }
+};
 
 const inventorySlot = item => { %>
   <div class="inventory-slot">
     <% if(Object.keys(item).length > 2){ %>
     <div class="rich-item inventory-item" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>">
       <div class="piece-hover-area"></div>
-      <% itemIcon(item, ['piece-icon']); %>
+      <%- itemIcon(item, ['piece-icon']); %>
       <% if(item.Count != 1){ %><div class="item-count"><%= item.Count %></div><% } %>
     </div>
     <% } %>
   </div>
 <% };
 
-const skill_component = (skill, icon, level, extra = {}) => { %>
-  <div class="skill xp-skill<%= level.level == level.maxLevel ? ' maxed-skill' : ''%>">
-    <div class="skill-icon" <% if(level.rank && level.rank < 50000){ %>
-      data-tippy-content="<span class='stat-name'>Rank: </span><span class='stat-value'></span>#<%= level.rank %></span>"
-    <% } %>>
-      <% if(icon.startsWith('head-')){ %>
-        <div class="head-icon" style="background-image:url(/head/<%= icon.substring(5) %>)"></div>
-      <% }else{ %>
-        <div class="item-icon <%= icon %>"></div>
-      <% } %>
-      <% if(level.level == level.maxLevel){ %><div class="piece-shine"></div><% } %>
+const skill_component = (skill, icon, level, extra = {}) => /*html*/`
+  <div class="skill xp-skill${esc(level.level == level.maxLevel ? ' maxed-skill' : '')}">
+    <div class="skill-icon" ${(level.rank && level.rank < 50000) ? /*html*/`
+      data-tippy-content="<span class='stat-name'>Rank: </span><span class='stat-value'></span>#${esc( level.rank )}</span>"
+    ` : ""}>
+      ${
+        icon.startsWith('head-')
+        ? /*html*/`<div class="head-icon" style="background-image:url(/head/${esc( icon.substring(5) )})"></div>`
+        : /*html*/`<div class="item-icon ${esc( icon )}"></div>`
+      }
+      ${level.level == level.maxLevel ? /*html*/`<div class="piece-shine"></div>` : ""}
     </div>
-    <div class="skill-name"><%= skill %> <span class="skill-level"><%= level.level >= 0 ? level.level : '?' %></span></div>
-    <div class="skill-bar" data-skill="<%= skill %>">
-      <div class="skill-progress-bar" style="--progress: <%= level.level == level.levelCap ? 1 : level.progress %>"></div>
-      <% if('runecrafting' in calculated.levels){ %>
-        <div class="skill-progress-text" data-hover-text="<%= level.xpCurrent.toLocaleString() %><% if(level.xpForNext != Infinity){ %> / <%= level.xpForNext.toLocaleString() %><% } %> XP">
-          <%= helper.formatNumber(level.xpCurrent, true) %><% if(level.xpForNext != Infinity){ %> / <%= helper.formatNumber(level.xpForNext) %><% } %> XP
-        </div>
-      <% } %>
+    <div class="skill-name">${esc( skill )} <span class="skill-level">${esc( level.level >= 0 ? level.level : '?' )}</span></div>
+    <div class="skill-bar" data-skill="${esc( skill )}">
+      <div class="skill-progress-bar" style="--progress: ${esc( level.level == level.levelCap ? 1 : level.progress )}"></div>
+      ${
+        'runecrafting' in calculated.levels
+        ? /*html*/`
+          <div class="skill-progress-text" data-hover-text="${esc( level.xpCurrent.toLocaleString() )}${level.xpForNext != Infinity ? "/" + esc(level.xpForNext.toLocaleString()) : ""} XP">
+            ${esc( helper.formatNumber(level.xpCurrent, true) )}${level.xpForNext != Infinity ? " / " + esc(helper.formatNumber(level.xpForNext)) : ""} XP
+          </div>
+        `
+        : ""
+      }
     </div>
   </div>
-<% };
+`;
 
 const stat_component = (stat) => {
   const bonusStats = stats[stat.name] - calculated.base_stats[stat.name]
-  %>
-  <div data-stat="<%= stat.name %>" class="basic-stat stat-<%= stat.name.replace(/\_/g, "-") %>">
-    <span data-tippy-content="
-    <span class='stat-name'>Base <%= getPrettyName(stat.name) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= calculated.base_stats[stat.name].toLocaleString() %></span>
-    <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= stat.baseExplanation %><% } %></div><br>
-    <span class='stat-name'>Bonus <%= getPrettyName(stat.name) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= bonusStats > 0 ? '+' : '' %><%= bonusStats.toLocaleString() %></span>
+  const tippyContent = /*html*/`
+    <span class='stat-name'>Base ${esc( getPrettyName(stat.name) )}: </span><span class='stat-value${stat.percent ? ' percent' : ''}'>${ calculated.base_stats[stat.name].toLocaleString() }</span>
+    <div class='tippy-explanation'>${stat.baseExplanation ? esc(stat.baseExplanation) : ""}</div><br>
+    <span class='stat-name'>Bonus ${esc( getPrettyName(stat.name) )}: </span><span class='stat-value${stat.percent ? ' percent' : ''}'>${ bonusStats > 0 ? '+' : '' }${ bonusStats.toLocaleString() }</span>
     <div class='tippy-explanation'>Additional bonuses from Armor, held items, Accessories and active Pets.</div>
-    <% if(Array.isArray(stat.extraStats)){
-      for(const extraStat of stat.extraStats){ %>
-    <br><span class='stat-name'><%= extraStat.stat %>: </span><span class='stat-value<%= extraStat.percent ? ' percent' : ''%>'><%= extraStat.value.toLocaleString() %></span>
-    <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= extraStat.explanation %><% } %></div>
-    <% }} %>
-    "><span class="stat-name"><%- getPrettyName(stat.name, true) %> </span><span class="stat-value<%= stat.percent ? ' percent' : ''%>"><%= stats[stat.name].toLocaleString() %></span></span></div>
-<% };
+    ${
+      Array.isArray(stat.extraStats)
+      ? stat.extraStats.map(extraStat => /*html*/`
+        <br><span class='stat-name'>${esc( extraStat.stat )}: </span><span class='stat-value${ extraStat.percent ? ' percent' : ''}'>${ extraStat.value.toLocaleString() }</span>
+        <div class='tippy-explanation'>${stat.baseExplanation ? esc(extraStat.explanation) : ""}</div>
+      `).join("")
+      : ""
+    }
+  `;
+  return /*html*/`
+    <div data-stat="${esc( stat.name )}" class="basic-stat stat-${esc( stat.name.replace(/\_/g, "-") )}">
+      <span data-tippy-content="${tippyContent}"><span class="stat-name">${ getPrettyName(stat.name, true) } </span><span class="stat-value${stat.percent ? ' percent' : ''}">${ stats[stat.name].toLocaleString() }</span></span>
+    </div>
+  `;
+};
 
 let description = "";
 
@@ -805,17 +828,17 @@ const getRarityUpgradeClass = item => {
           if('levels' in calculated){
         %>
           <div id="other_skills" class="skill-bars" data-api-enabled="<%= 'runecrafting' in calculated.levels %>">
-            <%= skill_component('Taming', 'icon-383_0_12', calculated.levels.taming) %>
-            <%= skill_component('Farming', 'icon-294_0', calculated.levels.farming) %>
-            <%= skill_component('Mining', 'icon-274_0', calculated.levels.mining) %>
-            <%= skill_component('Combat', 'icon-272_0', calculated.levels.combat) %>
-            <%= skill_component('Foraging', 'icon-6_3', calculated.levels.foraging) %>
-            <%= skill_component('Fishing', 'icon-346_0', calculated.levels.fishing) %>
-            <%= skill_component('Enchanting', 'icon-116_0', calculated.levels.enchanting) %>
-            <%= skill_component('Alchemy', 'icon-379_0', calculated.levels.alchemy) %>
+            <%- skill_component('Taming', 'icon-383_0_12', calculated.levels.taming) %>
+            <%- skill_component('Farming', 'icon-294_0', calculated.levels.farming) %>
+            <%- skill_component('Mining', 'icon-274_0', calculated.levels.mining) %>
+            <%- skill_component('Combat', 'icon-272_0', calculated.levels.combat) %>
+            <%- skill_component('Foraging', 'icon-6_3', calculated.levels.foraging) %>
+            <%- skill_component('Fishing', 'icon-346_0', calculated.levels.fishing) %>
+            <%- skill_component('Enchanting', 'icon-116_0', calculated.levels.enchanting) %>
+            <%- skill_component('Alchemy', 'icon-379_0', calculated.levels.alchemy) %>
             <% if('runecrafting' in calculated.levels){ %>
-              <%= skill_component('Carpentry', 'icon-58_0', calculated.levels.carpentry) %>
-              <%= skill_component('Runecrafting', 'icon-378_0', calculated.levels.runecrafting) %>
+              <%- skill_component('Carpentry', 'icon-58_0', calculated.levels.carpentry) %>
+              <%- skill_component('Runecrafting', 'icon-378_0', calculated.levels.runecrafting) %>
             <% }else{ %>
               <div class="no-access">Skills from achievements across profiles. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">Enable Skills API</a> for more accurate data.</div>
             <% } %>
@@ -897,7 +920,7 @@ const getRarityUpgradeClass = item => {
                   <div class="piece-shine"></div>
                 <% } %>
                 <div class="piece-hover-area"></div>
-                <% itemIcon(item, ['piece-icon']); %>
+                <%- itemIcon(item, ['piece-icon']); %>
               </div>
             <% } %>
           </div>
@@ -917,7 +940,7 @@ const getRarityUpgradeClass = item => {
                       <div class="piece-shine"></div>
                     <% } %>
                     <div class="piece-hover-area"></div>
-                    <% itemIcon(item, ['piece-icon']); %>
+                    <%- itemIcon(item, ['piece-icon']); %>
                   </div>
                 <% } else { %>
                   <div class="piece armor-placeholder index-<%= index %>">
@@ -964,7 +987,7 @@ const getRarityUpgradeClass = item => {
                     <% } %>
                     <div class="piece-hover-area"></div>
                     <div class="select-weapon"></div>
-                    <% itemIcon(item, ['piece-icon']); %>
+                    <%- itemIcon(item, ['piece-icon']); %>
                   </div>
               <%
                 });
@@ -1008,7 +1031,7 @@ const getRarityUpgradeClass = item => {
                       <div class="piece-shine"></div>
                     <% } %>
                     <div class="piece-hover-area"></div>
-                    <% itemIcon(item, ['piece-icon']); %>
+                    <%- itemIcon(item, ['piece-icon']); %>
                   </div>
                 <% }) %>
                 <p>
@@ -1028,7 +1051,7 @@ const getRarityUpgradeClass = item => {
                       <div class="piece-shine"></div>
                     <% } %>
                     <div class="piece-hover-area"></div>
-                    <% itemIcon(item, ['piece-icon']); %>
+                    <%- itemIcon(item, ['piece-icon']); %>
                   </div>
                 <% }) %>
               </div>
@@ -1305,7 +1328,7 @@ const getRarityUpgradeClass = item => {
                       <div class="piece-shine"></div>
                     <% } %>
                     <div class="piece-hover-area"></div>
-                    <% itemIcon(item, ['piece-icon']); %>
+                    <%- itemIcon(item, ['piece-icon']); %>
                   </div>
               <% }); %>
             </div>
@@ -1360,7 +1383,7 @@ const getRarityUpgradeClass = item => {
                       <div class="piece-shine"></div>
                     <% } %>
                     <div class="piece-hover-area"></div>
-                    <% itemIcon(item, ['piece-icon']); %>
+                    <%- itemIcon(item, ['piece-icon']); %>
                   </div>
               <% }); %>
             </div>
@@ -1466,7 +1489,7 @@ const getRarityUpgradeClass = item => {
                     <% } %>
                     <div class="piece-hover-area"></div>
                     <div class="select-rod"></div>
-                    <% itemIcon(item, ['piece-icon']); %>
+                    <%- itemIcon(item, ['piece-icon']); %>
                   </div>
               <%
                 });
@@ -1524,21 +1547,20 @@ const getRarityUpgradeClass = item => {
                 for(let tier in game_data.tiers) {
                   const tier_data = game_data.tiers[tier];
                 %>
+                <%- /*html*/`
                 <hr>
                 <div class="collection">
-                  <div class="collection-icon"><div class="item-icon icon-<%= tier_data.icon.replace(':', '_'); %>"></div></div>
+                  <div class="collection-icon"><div class="item-icon icon-${esc( tier_data.icon.replace(':', '_') )}"></div></div>
                   <div class="collection-stats">
-                    <div class="collection-name"><span class="stat-name"><%= tier_data.name %></span></div>
+                    <div class="collection-name"><span class="stat-name">${esc( tier_data.name )}</span></div>
                     <div class="collection-amount">
-                      <%
-                      for(let info in tier_data) {
-                        if(info == 'name' || info == 'icon') continue;
-                      %>
-                      <small class="stat-name"><%= helper.titleCase(info.replace('_', ' ')) %>: </small><small class="stat-value"><%= tier_data[info] %></small><br>
-                      <% } %>
+                      ${Object.entries(tier_data).filter(([key, value]) => key != 'name' && key != 'icon').map(([key, value]) => {
+                        return /*html*/`<small class="stat-name">${esc( helper.titleCase(key.replace('_', ' ')) )}: </small><small class="stat-value">${esc( value )}</small><br>`
+                      }).join("")}
                     </div>
                   </div>
                 </div>
+                ` %>
                 <% } %>
               </span>
             </div>
@@ -1563,40 +1585,46 @@ const getRarityUpgradeClass = item => {
           <%= calculated.display_name %> hasn't entered any dungeon yet.
         </p>
       <% } else { %>
-        <% if (calculated.dungeons.used_classes) { %>
-        <p class="stat-sub-header">Classes</p>
+        <%-
+          calculated.dungeons.used_classes
+          ? /*html*/`
+            <p class="stat-sub-header">Classes</p>
 
-        <span class="stat-name">Selected Class: </span>
-        <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span>
-        <div class="skill-bars">
-          <%= skill_component('Healer', 'icon-373_0', calculated.dungeons.classes.healer.experience) %>
-          <%= skill_component('Mage', 'icon-369_0', calculated.dungeons.classes.mage.experience) %>
-          <%= skill_component('Berserk', 'icon-267_0', calculated.dungeons.classes.berserk.experience) %>
-          <%= skill_component('Archer', 'icon-261_0', calculated.dungeons.classes.archer.experience) %>
-          <%= skill_component('Tank', 'icon-299_0', calculated.dungeons.classes.tank.experience) %>
-        </div>
-        <% } %>
+            <span class="stat-name">Selected Class: </span>
+            <span class="stat-value">${esc(helper.titleCase(calculated.dungeons.selected_class))}</span>
+            <div class="skill-bars">
+              ${ skill_component('Healer', 'icon-373_0', calculated.dungeons.classes.healer.experience) }
+              ${ skill_component('Mage', 'icon-369_0', calculated.dungeons.classes.mage.experience) }
+              ${ skill_component('Berserk', 'icon-267_0', calculated.dungeons.classes.berserk.experience) }
+              ${ skill_component('Archer', 'icon-261_0', calculated.dungeons.classes.archer.experience) }
+              ${ skill_component('Tank', 'icon-299_0', calculated.dungeons.classes.tank.experience) }
+            </div>
+          `
+          : ""
+        %>
 
         <% if (calculated.dungeons.catacombs?.visited) { %>
+          <% max = calculated.dungeons.journals.maxed ? "golden-text" : "" %>
+          <%- /*html*/`
           <p class="stat-sub-header">Catacombs</p>
 
           <p class="stat-raw-values">
             <div class="skill-bars">
-              <%= skill_component('Catacombs', 'head-964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793', calculated.dungeons.catacombs.level) %>
+              ${skill_component('Catacombs', 'head-964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793', calculated.dungeons.catacombs.level)}
             </div>
-            <span class="stat-name">Dungeon Item Boost: </span><span class="stat-value percent"><%= calculated.dungeons.catacombs.bonuses.item_boost %></span>
+            <span class="stat-name">Dungeon Item Boost: </span><span class="stat-value percent">${esc( calculated.dungeons.catacombs.bonuses.item_boost )}</span>
           </p>
 
           <p class="stat-raw-values">
-            <span class="stat-name">Highest Floor Beaten: </span><span class="stat-value"><%= helper.titleCase(calculated.dungeons.catacombs.highest_floor.replace("_", " ")) %></span><br>
-            <span class="stat-name">Secrets Found: </span><span class="stat-value"><%= calculated.dungeons.secrets_found %></span><br>
+            <span class="stat-name">Highest Floor Beaten: </span><span class="stat-value">${esc( helper.titleCase(calculated.dungeons.catacombs.highest_floor.replace("_", " ")) )}</span><br>
+            <span class="stat-name">Secrets Found: </span><span class="stat-value">${esc( calculated.dungeons.secrets_found )}</span><br>
             <span>
-              <% max = calculated.dungeons.journals.maxed ? "golden-text" : "" %>
-              <span class="stat-name <%= max %>">Journals Completed: </span>
-              <span class="stat-value <%= max %>"><%= calculated.dungeons.journals.journals_completed %></span>
-              <span class="grey-text"> (<%= calculated.dungeons.journals.pages_collected %>/<%= calculated.dungeons.journals.total_pages %>)</span>
+              <span class="stat-name ${ max }">Journals Completed: </span>
+              <span class="stat-value ${ max }">${esc( calculated.dungeons.journals.journals_completed )}</span>
+              <span class="grey-text"> (${esc( calculated.dungeons.journals.pages_collected )}/${esc( calculated.dungeons.journals.total_pages )})</span>
             </span>
           </p>
+          ` %>
 
           <div class="floor-containers narrow-info-container-wrapper">
             <% for (let [id, floor] of Object.entries(calculated.dungeons.catacombs.floors)) { %>
