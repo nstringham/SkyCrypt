@@ -157,25 +157,26 @@ getStats = items => {
   return stats;
 }
 
-const getBonus = (stats, prefix) => {
-  const statsNotZero = Object.keys(stats).filter(a => stats[a] > 0 && a != 'effective_health');
+const getBonus = stats => {
+  const statsNotZero = Object.keys(stats).filter((a) => stats[a] > 0 && a != "effective_health");
 
-  if(statsNotZero.length == 0)
-    return;
-
-  %>
-  <%- prefix %>
-  <span class="stat-name">Bonus: </span>
-  <%
-
-  for(const [index, stat] of statsNotZero.entries()){
-    if(stats[stat] == 0)
-      continue;
-    %>
-    <span style="margin-left: 2px; margin-right: 2px;" class="stat-name color-<%= stat.replace(/\_/g, "-") %>"><%= stats[stat].toLocaleString() %><%= statSuffix[stat] %> <abbr title="<%= getPrettyName(stat) %>"><%= statShort[stat] %></abbr></span>
-    <% if(index < statsNotZero.length - 1){ %><span class="bonus-divider" role="separator">//</span><% } %>
-  <% }
-}
+  if (statsNotZero.length == 0) {
+    return "";
+  } else {
+    return /*html*/`
+      <span class="stat-name">Bonus: </span>
+      <span class="stat-value">
+      ${
+        statsNotZero.map( (stat) =>
+          /*html*/`<span class="color-${ stat.replace(/\_/g, "-") }">
+            ${ stats[stat].toLocaleString() }${ statSuffix[stat] } <abbr title="${ getPrettyName(stat) }">${ statShort[stat] }</abbr>
+          </span>`
+        ).join(/*html*/`<span class="bonus-divider" role="separator"> // </span>`)
+      }
+      </span>
+    `;
+  }
+};
 
 const formatReforge = (string) => {
   let reforge = string.split('_').join(' ').trim()
@@ -199,20 +200,18 @@ const getReforges = (accessories) => {
     rarityReforgeCounts[rarity][reforge] += 1
   })
 
-  %>
-  <span class="stat-name">Reforges: </span>
-  <%
-  for (const [rarity, reforges] of Object.entries(rarityReforgeCounts)) {
-    for (const [reforge, amount] of Object.entries(reforges)) {
-      %><span class="stat-value piece-<%= rarity %>-fg"><%= amount %>× <%= formatReforge(reforge) %></span><%
-      if (reforge !== Object.keys(reforges).pop()) {
-        %><span class="bonus-divider">, </span><%
-      }
+  return /*html*/`
+    <span class="stat-name">Reforges: </span>
+    <span class="stat-value">
+    ${
+      Object.entries(rarityReforgeCounts).map( ([rarity, reforges]) => {
+        return Object.entries(reforges).map( ([reforge, amount]) => {
+          return /*html*/`<span class="piece-${ rarity }-fg">${ amount }× ${ formatReforge(reforge) }</span>`;
+        }).join(/*html*/`<span class="bonus-divider">, </span>`)
+      }).join(/*html*/`<span class="bonus-divider" role="separator"> // </span>`)
     }
-    if (rarity !== Object.keys(rarityReforgeCounts).pop()) {
-      %><span class="bonus-divider" role="separator"> // </span><%
-    }
-  }
+    </span>
+  `;
 }
 
 const formatEnrichment = (string) => {
@@ -1163,7 +1162,8 @@ const getRarityUpgradeClass = item => {
                 <div class="pet-level">Level <%= activePet.level.level %></div>
               </div>
             </div>
-            <%- getBonus(activePet.stats, '<br>') %>
+            <br>
+            <%- getBonus(activePet.stats) %>
           <% } %>
           <% if (otherPets) { %>
             <p class="stat-sub-header"><%= activePet ? 'Other Pets' : '' %></p>
