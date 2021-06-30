@@ -311,17 +311,21 @@ const itemIcon = (item, classes) => {
   }
 };
 
-const inventorySlot = item => { %>
+const inventorySlot = item => /*html*/`
   <div class="inventory-slot">
-    <% if(Object.keys(item).length > 2){ %>
-    <div class="rich-item inventory-item" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>">
-      <div class="piece-hover-area"></div>
-      <%- itemIcon(item, ['piece-icon']); %>
-      <% if(item.Count != 1){ %><div class="item-count"><%= item.Count %></div><% } %>
-    </div>
-    <% } %>
+    ${
+      Object.keys(item).length > 2
+      ? /*html*/`
+        <div class="rich-item inventory-item" data-item-id="${esc( item.itemId )}" data-item-index="${esc( item.item_index )}">
+          <div class="piece-hover-area"></div>
+          ${itemIcon(item, ['piece-icon'])}
+          ${item.Count != 1 ? /*html*/`<div class="item-count">${esc( item.Count )}</div>` : ""}
+        </div>
+      `
+      : ""
+    }
   </div>
-<% };
+`;
 
 const skill_component = (skill, icon, level, extra = {}) => /*html*/`
   <div class="skill xp-skill${esc(level.level == level.maxLevel ? ' maxed-skill' : '')}">
@@ -1276,18 +1280,13 @@ const getRarityUpgradeClass = item => {
                   <% } %>
                 </div>
               </div>
+              <%- /*html*/`
               <div class="inventory-view" data-inventory-type="inventory">
-                <% for(let i = 9; i < items.inventory.length; i++){ %>
-                  <% let item = items.inventory[i]; %>
-                  <%= inventorySlot(item); %>
-
-                <% } %>
+                ${items.inventory.slice(9).map( item => inventorySlot(item)).join("")}
                 <hr>
-                <% for(let i = 0; i < 9; i++){ %>
-                  <% let item = items.inventory[i]; %>
-                  <%= inventorySlot(item); %>
-                <% } %>
+                ${items.inventory.slice(0,9).map( item => inventorySlot(item)).join("")}
               </div>
+              ` %>
             </div>
           <% } %>
         </div>
