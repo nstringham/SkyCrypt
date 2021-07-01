@@ -530,6 +530,40 @@ const getRarityUpgradeClass = item => {
   return `piece-rarity-upgrade-${upgrades}`
 }
 
+/** @type {{ id: string, name: string, type: "copy" | "url" }[]} */
+const socials = [
+  {
+    id: "DISCORD",
+    name: "Discord",
+    type: "copy",
+  },
+  {
+    id: "TWITTER",
+    name: "Twitter",
+    type: "url",
+  },
+  {
+    id: "YOUTUBE",
+    name: "YouTube",
+    type: "url",
+  },
+  {
+    id: "INSTAGRAM",
+    name: "Instagram",
+    type: "url",
+  },
+  {
+    id: "TWITCH",
+    name: "Twitch",
+    type: "url",
+  },
+  {
+    id: "HYPIXEL",
+    name: "Hypixel Forums",
+    type: "url",
+  },
+]
+
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -581,8 +615,8 @@ const getRarityUpgradeClass = item => {
         </p>
       </figure>
     <% } %>
+    <%- /*html*/`
     <div id="player_profile"><span class="text-stats-for">Stats for</span>
-      <%- /*html*/`
       <span tabindex="0" id="stats_for_player">
         ${jerriefy(calculated.rank_prefix)}
         ${esc(calculated.display_name)}
@@ -631,36 +665,50 @@ const getRarityUpgradeClass = item => {
           }
         </ul>
       </span>
-      ` %>
       <div id="additional_player_stats">
-        <button class="additional-player-stat svg-icon favorite" data-username="<%= calculated.uuid %>" role="checkbox" aria-checked="<%= extra.favoriteUUIDs.includes(calculated.uuid) %>">
+        <button class="additional-player-stat svg-icon favorite" data-username="<${esc(calculated.uuid)}" role="checkbox" aria-checked="${esc(extra.favoriteUUIDs.includes(calculated.uuid))}">
           <svg viewBox="0 0 24 24">
             <title>star</title>
             <path class="solid" fill="white" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
             <path class="outline" fill="white" d="M12,15.39L8.24,17.66L9.23,13.38L5.91,10.5L10.29,10.13L12,6.09L13.71,10.13L18.09,10.5L14.77,13.38L15.76,17.66M22,9.24L14.81,8.63L12,2L9.19,8.63L2,9.24L7.45,13.97L5.82,21L12,17.27L18.18,21L16.54,13.97L22,9.24Z" />
           </svg>
         </button>
-        <% if(calculated.guild){ %><button class="additional-player-stat interactive-tooltip" data-tippy-content="
-        <% if(calculated.guild.rank){ %><span class='stat-name'>Rank: </span><span class='stat-value'><%= calculated.guild.rank %></span><br><br><% } %>
-        <span class='stat-name'>Guild Master: </span><% if(calculated.guild.gm) {%> <a href='/stats/<%= calculated.guild.gm %>' class='no-underline stat-value'><%= calculated.guild.gmUser.display_name %><%} else { %>None<% } %></a><br>
-        <% if(calculated.guild.tag){ %><span class='stat-name'>Tag: </span><span class='stat-value'><%- helper.renderLore('§f'+calculated.guild.tag) %></span><br><% } %>
-        <% if(calculated.guild.members){ %><span class='stat-name'>Members: </span><span class='stat-value'><%= calculated.guild.members %></span><br><% } %>
-        <% if(calculated.guild.level){ %><span class='stat-name'>Level: </span><span class='stat-value'><%= calculated.guild.level %></span><br><% } %>
-        ">Guild: <%= calculated.guild.name %></button><% } %>
-        <a href="https://auctions.craftlink.xyz/players/<%= calculated.uuid %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">HyAuctions</a>
-        <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">Plancke</a>
+        ${
+          calculated.guild
+          ? /*html*/`
+            <button class="additional-player-stat interactive-tooltip" data-tippy-content="
+              ${calculated.guild.rank ? /*html*/`<span class='stat-name'>Rank: </span><span class='stat-value'>${esc( calculated.guild.rank )}</span><br><br>` : ""}
+              <span class='stat-name'>Guild Master: </span>${calculated.guild.gm ? /*html*/`<a href='/stats/${esc( calculated.guild.gm )}' class='no-underline stat-value'>${esc( calculated.guild.gmUser.display_name )}</a>` : "None"}<br>
+              ${calculated.guild.tag ? /*html*/`<span class='stat-name'>Tag: </span><span class='stat-value'>${ helper.renderLore('§f'+calculated.guild.tag) }</span><br>` : ""}
+              ${calculated.guild.members ? /*html*/`<span class='stat-name'>Members: </span><span class='stat-value'>${esc( calculated.guild.members )}</span><br>` : ""}
+              ${calculated.guild.level ? /*html*/`<span class='stat-name'>Level: </span><span class='stat-value'>${esc( calculated.guild.level )}</span><br>` : ""}
+            ">Guild: ${esc(calculated.guild.name)}</button>
+            `
+          : ""
+        }
+        <a href="https://auctions.craftlink.xyz/players/${esc( calculated.uuid )}" target="_blank" rel="noreferrer" class="additional-player-stat external-link">HyAuctions</a>
+        <a href="https://plancke.io/hypixel/player/stats/${esc( calculated.display_name )}" target="_blank" rel="noreferrer" class="additional-player-stat external-link">Plancke</a>
         <div id="additional_socials">
-          <button data-copy-text="<%= calculated.uuid %>" class="copy-text additional-player-stat">Copy UUID</button>
-          <% if('DISCORD' in calculated.social){ %><button data-copy-text="<%= calculated.social.DISCORD %>" class="additional-player-stat copy-text external-discord external-icon"><%= calculated.social.DISCORD %></button><% } %>
-          <% if('TWITTER' in calculated.social){ %><a data-tippy-content="Twitter" href="<%= calculated.social.TWITTER %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitter"></a><% } %>
-          <% if('YOUTUBE' in calculated.social){ %><a data-tippy-content="YouTube" href="<%= calculated.social.YOUTUBE %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-youtube"></a><% } %>
-          <% if('INSTAGRAM' in calculated.social){ %><a data-tippy-content="Instagram" href="<%= calculated.social.INSTAGRAM %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-instagram"></a><% } %>
-          <% if('TWITCH' in calculated.social){ %><a data-tippy-content="Twitch" href="<%= calculated.social.TWITCH %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitch"></a><% } %>
-          <% if('HYPIXEL' in calculated.social){ %><a data-tippy-content="Hypixel Forums" href="<%= calculated.social.HYPIXEL %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-hypixel"></a><% } %>
+          <button data-copy-text="${esc( calculated.uuid )}" class="copy-text additional-player-stat">Copy UUID</button>
+          ${
+            socials.filter(social => social.id in calculated.social).map(social => {
+              switch (social.type) {
+                case "copy":
+                  return /*html*/`
+                    <button data-copy-text="${esc(calculated.social[social.id])}" class="additional-player-stat copy-text external-${social.id.toLowerCase()} external-icon">${esc(calculated.social[social.id])}</button>
+                  `;
+                case "url":
+                  return /*html*/`
+                    <a data-tippy-content="${social.name}" href="${esc(calculated.social[social.id])}" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-${social.id.toLowerCase()}"></a>
+                  `;
+              }
+            }).join("")
+          }
           <button class="additional-player-stat" id="reveal_socials" aria-label="reveal socials"></button>
         </div>
       </div>
     </div>
+    ` %>
     <div id="basic_stats">
       <%
         let stats = Object.assign({}, calculated.stats);
