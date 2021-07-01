@@ -582,51 +582,56 @@ const getRarityUpgradeClass = item => {
       </figure>
     <% } %>
     <div id="player_profile"><span class="text-stats-for">Stats for</span>
+      <%- /*html*/`
       <span tabindex="0" id="stats_for_player">
-        <%- jerriefy(calculated.rank_prefix) %>
-        <%= calculated.display_name %>
-        <% if(calculated.display_emoji_img){ %>
-          <img class="emoji" draggable="false" src="<%= calculated.display_emoji_img %>">
-        <% }else if(calculated.display_emoji){ %>
-          <%- extra.twemoji.parse(calculated.display_emoji) %>
-        <% } %>
+        ${jerriefy(calculated.rank_prefix)}
+        ${esc(calculated.display_name)}
+        ${
+          calculated.display_emoji_img
+          ? /*html*/`<img class="emoji" draggable="false" src="${esc(calculated.display_emoji_img)}">`
+          : calculated.display_emoji
+            ? extra.twemoji.parse(calculated.display_emoji)
+            : ""
+        }
         <ul id="other_players">
-          <% calculated.members.forEach(member => { %>
-            <li>
-              <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>">
-                <%= member.display_name %>
-                <% if(member.emojiImg){ %>
-                  <img class="emoji" draggable="false" src="<%= member.emojiImg %>">
-                <% }else if(member.emoji){ %>
-                  <%- extra.twemoji.parse(member.emoji) %>
-                <% } %>
-                <span class="goto-last-played"><%= 'last_updated' in member ? member.last_updated.text : '' %></span>
-              </a>
-            </li>
-          <% }); %>
+          ${
+            calculated.members.map(member => /*html*/`
+              <li>
+                <a class="goto" href="/stats/${esc(member.uuid)}/${esc(calculated.profile.profile_id)}${esc(Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '')}">
+                  ${esc(member.display_name)}
+                  ${
+                    member.emojiImg
+                    ? /*html*/`<img class="emoji" draggable="false" src="${esc(member.emojiImg)}">`
+                    : member.emoji
+                      ? extra.twemoji.parse(member.emoji)
+                      : ""
+                  }
+                  <span class="goto-last-played">${esc(member.last_updated?.text ?? '')}</span>
+                </a>
+              </li>
+            ` ).join("")
+          }
         </ul>
       </span>
       <span class="text-on"> on </span>
       <span tabindex="0" id="stats_for_profile">
-        <%= calculated.profile.cute_name %>
-        <% if(calculated.profile.game_mode == 'ironman'){ %>
-          <img src="/resources/img/icons/ironman.png" class="emoji" alt="ironman">
-        <% } %>
+        ${esc(calculated.profile.cute_name)}
+        ${calculated.profile.game_mode == 'ironman' ? /*html*/`<img src="/resources/img/icons/ironman.png" class="emoji" alt="ironman">` : "" }
         <ul id="other_profiles">
-          <% for(let profile_id in calculated.profiles){ %>
-            <% let _profile = calculated.profiles[profile_id]; %>
-            <li>
-              <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>">
-                <%= _profile.cute_name %>
-                <% if(_profile.game_mode == 'ironman'){ %>
-                  <img src="/resources/img/icons/ironman.png" class="emoji">
-                <% } %>
-                <span class="goto-last-played"><%= 'last_updated' in _profile ? _profile.last_updated.text : '' %></span>
-              </a>
-            </li>
-          <% } %>
+          ${
+            Object.entries(calculated.profiles).map(([profile_id, _profile]) => /*html*/`
+              <li>
+                <a class="goto" href="/stats/${esc(calculated.uuid)}/${esc(_profile.profile_id)}${esc(Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '')}">
+                  ${esc(_profile.cute_name)}
+                  ${_profile.game_mode == 'ironman' ? /*html*/`<img src="/resources/img/icons/ironman.png" class="emoji">` : ""}
+                  <span class="goto-last-played">${esc(_profile.last_updated?.text ?? '')}</span>
+                </a>
+              </li>
+            `).join("")
+          }
         </ul>
       </span>
+      ` %>
       <div id="additional_player_stats">
         <% /*
 
