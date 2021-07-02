@@ -567,18 +567,20 @@ const socials = [
 %>
 <!DOCTYPE html>
 <html lang="en">
+<%- /*html*/`
 <head>
-  <title><%= calculated.display_name %><% if(calculated.display_emoji){ %> <%= calculated.display_emoji %><% } %> | SkyCrypt</title>
-  <meta name="description" content="<%= metaDescription %>">
-  <link rel="icon" href="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : calculated.uuid %>?size=32&overlay" sizes="32x32" type="image/png">
+  <title>${esc( calculated.display_name)} ${esc( calculated.display_emoji ?? "" )} | SkyCrypt</title>
+  <meta name="description" content="${esc( metaDescription )}">
+  <link rel="icon" href="https://crafatar.com/avatars/${ extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : calculated.uuid }?size=32&overlay" sizes="32x32" type="image/png">
   <meta property="og:type" content="profile">
-  <meta property="og:title" content="<%= metaTitle %>">
-  <meta property="og:image" content="https://crafatar.com/avatars/<%= calculated.uuid %>?size=512&overlay">
-  <meta property="og:description" content="<%= description %>">
-  <meta property="og:profile:username" content="<%= calculated.display_name %>">
-  <meta name="twitter:card" content="summary"></meta>
-<%- resources %>
+  <meta property="og:title" content="${esc(metaTitle)}">
+  <meta property="og:image" content="https://crafatar.com/avatars/${esc(calculated.uuid)}?size=512&overlay">
+  <meta property="og:description" content="${esc(description)}">
+  <meta property="og:profile:username" content="${esc(calculated.display_name)}">
+  <meta name="twitter:card" content="summary">
+  ${resources}
 </head>
+` %>
 <body class="page-stats">
   <svg xmlns="http://www.w3.org/2000/svg" height="0" width="0" style="position: fixed;">
     <filter id="enchanted-glint">
