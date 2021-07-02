@@ -732,106 +732,95 @@ const socials = [
 
       <div id="skin_display_mobile"></div>
 
+      <%- /*html*/`
       <div id="base_stats_container">
-        <%- stat_component({
-          name: 'health',
-          baseExplanation: "Increased by collecting Fairy Souls, leveling your Farming and Fishing skills and leveling up in Zombie or Wolf Slayer.",
-        }); %>
-
-        <%- stat_component({
-          name: 'defense',
-          baseExplanation: "Increased by collecting Fairy Souls and leveling your Mining skill.",
-          extraStats: [
-            {
-              stat: 'Damage Reduction',
-              value: (stats.defense / (stats.defense + 100) * 100).toFixed(1),
-              percent: true
-            },
-            {
-              stat: 'Effective Health',
-              value: stats.effective_health,
-              explanation: 'Effective Health based on Health + Defense.<br>→ Formula: Health * (1 + Defense / 100)'
-            }
-          ]
-        }); %>
-
-        <%- stat_component({
-          name: 'strength',
-          baseExplanation: "Increased by collecting Fairy Souls and leveling your Foraging skill."
-        }); %>
-
-        <%- stat_component({
-          name: 'speed',
-          percent: true,
-          baseExplanation: "Increased by collecting Fairy Souls and leveling up in Wolf Slayer."
-        }); %>
-
-        <%- stat_component({
-          name: 'crit_chance',
-          percent: true,
-          baseExplanation: "Increased by leveling your Combat skill and leveling up in Spider Slayer."
-        }); %>
-
-        <%- stat_component({
-          name: 'crit_damage',
-          percent: true,
-          baseExplanation: "Increased by leveling up in Spider or Wolf Slayer."
-        }); %>
-
-        <%- stat_component({
-          name: 'bonus_attack_speed',
-          percent: true,
-          baseExplanation: null
-        }); %>
-
-        <%- stat_component({
-          name: 'intelligence',
-          baseExplanation: "Increased by leveling your Enchanting and Alchemy skills and completing songs on Melody's Harp."
-        }); %>
-
-        <%- stat_component({
-          name: 'sea_creature_chance',
-          percent: true,
-          baseExplanation: null
-        }); %>
-
-        <%- stat_component({
-          name: 'magic_find',
-          baseExplanation: "Increased by collecting unique pets with high rarities."
-        }); %>
-
-        <%- stat_component({
-          name: 'pet_luck',
-          baseExplanation: "Increased by leveling your Taming Skill."
-        }); %>
-
-        <%- stat_component({
-          name: 'ferocity',
-          baseExplanation: null,
-          extraStats: [
-            {
-              stat: 'Base Extra Strikes',
-              value: (stats.ferocity / 100).toFixed(0),
-            },
-            {
-              stat: 'Chance for 1 more',
-              value: stats.ferocity % 100,
-              percent: true
-            }
-          ]
-        }); %>
-
-        <%- stat_component({
-          name: 'ability_damage',
-          percent: true,
-          baseExplanation: "Increased by leveling your Enchanting Skill."
-        }); %>
-        <!--<div data-stat="fairy_souls" class="basic-stat stat-fairy-souls">
-          <span data-tippy-content="
-            Collect Fairy Souls to gain Health, Defense, Strength and Speed.</div>
-          "><span class="stat-name">Fairy Souls </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span></span>
-        </div>-->
+        ${
+        [
+          {
+            name: 'health',
+            baseExplanation: "Increased by collecting Fairy Souls, leveling your Farming and Fishing skills and leveling up in Zombie or Wolf Slayer.",
+          },
+          {
+            name: 'defense',
+            baseExplanation: "Increased by collecting Fairy Souls and leveling your Mining skill.",
+            extraStats: [
+              {
+                stat: 'Damage Reduction',
+                value: (stats.defense / (stats.defense + 100) * 100).toFixed(1),
+                percent: true
+              },
+              {
+                stat: 'Effective Health',
+                value: stats.effective_health,
+                explanation: 'Effective Health based on Health + Defense.<br>→ Formula: Health * (1 + Defense / 100)'
+              }
+            ]
+          },
+          {
+            name: 'strength',
+            baseExplanation: "Increased by collecting Fairy Souls and leveling your Foraging skill."
+          },
+          {
+            name: 'speed',
+            percent: true,
+            baseExplanation: "Increased by collecting Fairy Souls and leveling up in Wolf Slayer."
+          },
+          {
+            name: 'crit_chance',
+            percent: true,
+            baseExplanation: "Increased by leveling your Combat skill and leveling up in Spider Slayer."
+          },
+          {
+            name: 'crit_damage',
+            percent: true,
+            baseExplanation: "Increased by leveling up in Spider or Wolf Slayer."
+          },
+          {
+            name: 'bonus_attack_speed',
+            percent: true,
+            baseExplanation: null
+          },
+          {
+            name: 'intelligence',
+            baseExplanation: "Increased by leveling your Enchanting and Alchemy skills and completing songs on Melody's Harp."
+          },
+          {
+            name: 'sea_creature_chance',
+            percent: true,
+            baseExplanation: null
+          },
+          {
+            name: 'magic_find',
+            baseExplanation: "Increased by collecting unique pets with high rarities."
+          },
+          {
+            name: 'pet_luck',
+            baseExplanation: "Increased by leveling your Taming Skill."
+          },
+          {
+            name: 'ferocity',
+            baseExplanation: null,
+            extraStats: [
+              {
+                stat: 'Base Extra Strikes',
+                value: (stats.ferocity / 100).toFixed(0),
+              },
+              {
+                stat: 'Chance for 1 more',
+                value: stats.ferocity % 100,
+                percent: true
+              }
+            ]
+          },
+          {
+            name: 'ability_damage',
+            percent: true,
+            baseExplanation: "Increased by leveling your Enchanting Skill."
+          }
+        ].map(stat_component).join("")
+        }
       </div>
+      ` %>
 
       <div id="additional_stats_container">
         <% if(calculated.current_area){ %>
