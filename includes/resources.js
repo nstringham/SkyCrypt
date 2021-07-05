@@ -42,7 +42,7 @@ ${
   page == "stats"
     ? /*html*/ `
       <link rel="preload" href="/resources/css/inventory.css?${fileHashes.css["inventory.css"]}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-      <script async type="module" src="/resources/js/localTimeElement.mjs?${fileHashes.js["localTimeElement.mjs"]}"></script>
+      <script async type="module" src="/resources/js/localTimeElement.js?${fileHashes.js["localTimeElement.js"]}"></script>
       <script defer src="/resources/js/stats-defer.js?${fileHashes.js["stats-defer.js"]}"></script>
     `
     : ""
