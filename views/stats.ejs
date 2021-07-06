@@ -575,6 +575,7 @@ const socials = [
 </head>
 ` %>
 <body class="page-stats">
+  <%- /*html*/`
   <svg xmlns="http://www.w3.org/2000/svg" height="0" width="0" style="position: fixed;">
     <filter id="enchanted-glint">
     <feImage href="/resources/img/enchanted-glint.png" />
@@ -582,7 +583,7 @@ const socials = [
     <feBlend in="SourceGraphic" mode="screen" />
     </filter>
   </svg>
-  <%- header %>
+  ${ header }
   <div id="dimmer">
     <video preload="none" id="enable_api" loop>
       <source type="video/webm" src="/resources/video/enable-api.webm"></source>
@@ -598,6 +599,7 @@ const socials = [
   <div id="skin_display">
     <div id="player_model"></div>
   </div>
+  ` %>
   <main id="wrapper" data-sticky-container>
     <% if(extra.cacheOnly) { %>
       <figure class="banner error">
