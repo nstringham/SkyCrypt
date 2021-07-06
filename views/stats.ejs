@@ -874,33 +874,38 @@ const socials = [
           <span class="stat-name">Weight: </span><span class="stat-value">${ parseFloat(calculated.weight.toFixed(2)).toLocaleString() }</span></span>
         </div>
       </div>
-      ` %>
 
       <div id="skill_levels_container">
-        <%
-          if('levels' in calculated){
-        %>
-          <div id="other_skills" class="skill-bars" data-api-enabled="<%= 'runecrafting' in calculated.levels %>">
-            <%- skill_component('Taming', 'icon-383_0_12', calculated.levels.taming) %>
-            <%- skill_component('Farming', 'icon-294_0', calculated.levels.farming) %>
-            <%- skill_component('Mining', 'icon-274_0', calculated.levels.mining) %>
-            <%- skill_component('Combat', 'icon-272_0', calculated.levels.combat) %>
-            <%- skill_component('Foraging', 'icon-6_3', calculated.levels.foraging) %>
-            <%- skill_component('Fishing', 'icon-346_0', calculated.levels.fishing) %>
-            <%- skill_component('Enchanting', 'icon-116_0', calculated.levels.enchanting) %>
-            <%- skill_component('Alchemy', 'icon-379_0', calculated.levels.alchemy) %>
-            <% if('runecrafting' in calculated.levels){ %>
-              <%- skill_component('Carpentry', 'icon-58_0', calculated.levels.carpentry) %>
-              <%- skill_component('Runecrafting', 'icon-378_0', calculated.levels.runecrafting) %>
-            <% }else{ %>
-              <div class="no-access">Skills from achievements across profiles. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">Enable Skills API</a> for more accurate data.</div>
-            <% } %>
-          </div>
-          <button id="show_skills">Show skills</button>
-        <% }else{ %>
-          <div class="no-access"><%= calculated.display_name %> doesn't have skills access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">See here</a> how to enable full API access.</div>
-        <% } %>
+        ${
+          'levels' in calculated
+          ? /*html*/`
+            <div id="other_skills" class="skill-bars" data-api-enabled="${ 'runecrafting' in calculated.levels }">
+              ${
+                [
+                  ['Taming', 'icon-383_0_12', calculated.levels.taming],
+                  ['Farming', 'icon-294_0', calculated.levels.farming],
+                  ['Mining', 'icon-274_0', calculated.levels.mining],
+                  ['Combat', 'icon-272_0', calculated.levels.combat],
+                  ['Foraging', 'icon-6_3', calculated.levels.foraging],
+                  ['Fishing', 'icon-346_0', calculated.levels.fishing],
+                  ['Enchanting', 'icon-116_0', calculated.levels.enchanting],
+                  ['Alchemy', 'icon-379_0', calculated.levels.alchemy],
+                ].map(args => skill_component(...args)).join("")
+              }
+              ${
+                'runecrafting' in calculated.levels
+                ? skill_component('Carpentry', 'icon-58_0', calculated.levels.carpentry) + skill_component('Runecrafting', 'icon-378_0', calculated.levels.runecrafting)
+                : /*html*/`<div class="no-access">Skills from achievements across profiles. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">Enable Skills API</a> for more accurate data.</div>`
+              }
+            </div>
+            <button id="show_skills">Show skills</button>
+          `
+          : /*html*/`
+            <div class="no-access">${esc(calculated.display_name)} doesn't have skills access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">See here</a> how to enable full API access.</div>
+          `
+        }
       </div>
+      ` %>
     </div>
     <div id="nav_bar">
       <div id="nav_bar_line"></div>
