@@ -601,18 +601,22 @@ const socials = [
   </div>
   ` %>
   <main id="wrapper" data-sticky-container>
-    <% if(extra.cacheOnly) { %>
-      <figure class="banner error">
-        <figcaption>Cache Only Mode!</figcaption>
-        <p>
-          SkyCrypt is <strong>only</strong> showing the last known state of user's profiles which may be outdated due to API maintenance.<br>
-          <%# <i>If a profile wasn't viewed/cached before, it can't be viewed.</i><br> %>
-          <br>
-          For more info about Hypixel outages visit the official <a href="https://status.hypixel.net/" target="_blank" rel="noreferrer"> Hypixel Status</a>.
-        </p>
-      </figure>
-    <% } %>
     <%- /*html*/`
+    ${
+      extra.cacheOnly
+      ? /*html*/`
+        <figure class="banner error">
+          <figcaption>Cache Only Mode!</figcaption>
+          <p>
+            SkyCrypt is <strong>only</strong> showing the last known state of user's profiles which may be outdated due to API maintenance.<br>
+            <!-- <i>If a profile wasn't viewed/cached before, it can't be viewed.</i><br> -->
+            <br>
+            For more info about Hypixel outages visit the official <a href="https://status.hypixel.net/" target="_blank" rel="noreferrer"> Hypixel Status</a>.
+          </p>
+        </figure>
+      `
+      : ""
+    }
     <div id="player_profile"><span class="text-stats-for">Stats for</span>
       <span tabindex="0" id="stats_for_player">
         ${jerriefy(calculated.rank_prefix)}
