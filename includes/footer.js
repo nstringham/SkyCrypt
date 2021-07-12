@@ -1,6 +1,6 @@
 /**
  * renders the footer
- * @param {{page:string, fileHashes:{[key:string]:{[key:string]:string}}, extra:{isFoolsDay:boolean}}} options
+ * @param {{page:string, fileHashes:{css:{[key:string]:string}}, extra:{isFoolsDay:boolean}}} options
  * @returns {string} HTML
  */
 function render({ page, fileHashes, extra }) {
@@ -8,7 +8,6 @@ function render({ page, fileHashes, extra }) {
 <script src="https://unpkg.com/popper.js@1"></script>
 <script src="https://unpkg.com/tippy.js@5"></script>
 <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
-<script src="/resources/js/skinview3d.bundle.js?${fileHashes.js["skinview3d.bundle.js"]}"></script>
 <script async src="https://arc.io/widget.min.js#oNMq8LVU"></script>
 
 <script>

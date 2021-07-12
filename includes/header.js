@@ -10,14 +10,15 @@ const defaultPack = {
 
 /**
  * renders the header
- * @param {{page:string, fileHashes:{[key:string]:{[key:string]:string}}, extra:{donations:{patreon:string},themes:{[key:string]:{}},packs:{}[]}, req}} options
+ * @param {{page:string, fileNameMap:{[key:string]:string}, extra:{donations:{patreon:string},themes:{[key:string]:{}},packs:{}[]}, req}} options
  * @returns {string} HTML
  */
-function render({ page, fileHashes, extra, req }) {
+function render({ page, fileNameMap, extra, req }) {
   return /*html*/ `
-<script src="/resources/js/common.js?${fileHashes.js["common.js"]}"></script>
+<script type="module" src="/resources/js/${fileNameMap["themes"]}"></script>
 <header>
-  <div data-tippy-content="Supporting LGBTQ+ rights all around the year! ❤️<br><br>Click for a surprise. :)" class="pride-flag logo"></div>
+  <div data-tippy-content="Supporting LGBTQ+ rights all around the year! ❤️<br><br>Click for a surprise. :)" class="pride-flag"></div>
+  <script>document.querySelector(".pride-flag").classList.add(localStorage.getItem("currentFlag") ?? "logo");</script>
   <a href="/" id="site_name">SkyCrypt</a>
   <button class="social-button expander" id="info-button" aria-expanded="false">
     About

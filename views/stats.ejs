@@ -309,7 +309,6 @@ const inventorySlot = item => /*html*/`
       Object.keys(item).length > 2
       ? /*html*/`
         <div class="rich-item inventory-item" data-item-id="${esc( item.itemId )}" data-item-index="${esc( item.item_index )}">
-          <div class="piece-hover-area"></div>
           ${itemIcon(item, ['piece-icon'])}
           ${item.Count != 1 ? /*html*/`<div class="item-count">${esc( item.Count )}</div>` : ""}
         </div>
@@ -326,7 +325,7 @@ const skill_component = (skill, icon, level, extra = {}) => /*html*/`
     ` : ""}>
       ${
         icon.startsWith('head-')
-        ? /*html*/`<div class="head-icon" style="background-image:url(/head/${esc( icon.substring(5) )})"></div>`
+        ? /*html*/`<div class="item-icon custom-icon" style="background-image:url(/head/${esc( icon.substring(5) )})"></div>`
         : /*html*/`<div class="item-icon ${esc( icon )}"></div>`
       }
       ${level.level == level.maxLevel ? /*html*/`<div class="piece-shine"></div>` : ""}
@@ -595,9 +594,9 @@ if(rod.length > 0)
   <%- /*html*/`
   <svg xmlns="http://www.w3.org/2000/svg" height="0" width="0" style="position: fixed;">
     <filter id="enchanted-glint">
-    <feImage href="/resources/img/enchanted-glint.png" />
-    <feComposite in2="SourceGraphic" operator="in" />
-    <feBlend in="SourceGraphic" mode="screen" />
+      <feImage href="/resources/img/enchanted-glint.png" />
+      <feComposite in2="SourceGraphic" operator="in" />
+      <feBlend in="SourceGraphic" mode="screen" />
     </filter>
   </svg>
   ${ header }
@@ -975,7 +974,6 @@ if(rod.length > 0)
                 <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                   <div class="piece-shine"></div>
                 <% } %>
-                <div class="piece-hover-area"></div>
                 <%- itemIcon(item, ['piece-icon']); %>
               </div>
             <% } %>
@@ -995,7 +993,6 @@ if(rod.length > 0)
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
-                    <div class="piece-hover-area"></div>
                     <%- itemIcon(item, ['piece-icon']); %>
                   </div>
                 <% } else { %>
@@ -1041,7 +1038,6 @@ if(rod.length > 0)
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
-                    <div class="piece-hover-area"></div>
                     <div class="select-weapon"></div>
                     <%- itemIcon(item, ['piece-icon']); %>
                   </div>
@@ -1086,7 +1082,6 @@ if(rod.length > 0)
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
-                    <div class="piece-hover-area"></div>
                     <%- itemIcon(item, ['piece-icon']); %>
                   </div>
                 <% }) %>
@@ -1106,7 +1101,6 @@ if(rod.length > 0)
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
-                    <div class="piece-hover-area"></div>
                     <%- itemIcon(item, ['piece-icon']); %>
                   </div>
                 <% }) %>
@@ -1122,14 +1116,12 @@ if(rod.length > 0)
                 <p class="stat-sub-header">Missing Accessories<span data-tippy-content='Missing accessories that are <strong>not</strong> upgrades of another talisman.'></span></p>
                 <% for(const [index, talisman] of calculated.missingTalismans.missing.entries()){ %>
                   <div tabindex="0" data-missing-talisman-index="<%= index %>" class="rich-item piece piece-<%= talisman.rarity %>-bg missing-talisman">
-                    <div class="piece-hover-area"></div>
                     <div style='background-image: url("<%= talisman.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                   </div>
                 <% } %>
                 <p class="stat-sub-header">Missing Accessory Upgrades<span data-tippy-content='Missing accessories that are upgrades of a lower tier talisman.'></span></p>
                 <% for(const [index, talisman] of calculated.missingTalismans.upgrades.entries()){ %>
                   <div tabindex="0" data-upgrade-talisman-index="<%= index %>" class="rich-item piece piece-<%= talisman.rarity %>-bg missing-talisman">
-                    <div class="piece-hover-area"></div>
                     <div style='background-image: url("<%= talisman.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                   </div>
                 <% } %>
@@ -1207,7 +1199,6 @@ if(rod.length > 0)
                 <% if (rarityOrder.indexOf(activePet.rarity) < 3) { %>
                   <div class="piece-shine"></div>
                 <% } %>
-                <div class="piece-hover-area"></div>
                 <div style='background-image: url("<%= activePet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
               </div>
               <div class="active-pet-info">
@@ -1236,7 +1227,6 @@ if(rod.length > 0)
                   <% if(rarityOrder.indexOf(pet.rarity) < 3) { %>
                     <div class="piece-shine"></div>
                   <% } %>
-                  <div class="piece-hover-area"></div>
                   <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                   <div class="other-pet-level"><abbr title="Level">Lvl</abbr> <%= pet.level.level %></div>
                 </div>
@@ -1251,7 +1241,6 @@ if(rod.length > 0)
             <div class="pieces extendable" id="missing-pets">
               <% for(const [index, pet] of calculated.missingPets.entries()) { %>
                 <div tabindex="0" data-missing-pet-index="<%= index %>" class="rich-item piece piece-<%= pet.rarity %>-bg missing-pet">
-                  <div class="piece-hover-area"></div>
                   <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                 </div>
               <% } %>
@@ -1379,7 +1368,6 @@ if(rod.length > 0)
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
-                    <div class="piece-hover-area"></div>
                     <%- itemIcon(item, ['piece-icon']); %>
                   </div>
               <% }); %>
@@ -1434,18 +1422,17 @@ if(rod.length > 0)
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
-                    <div class="piece-hover-area"></div>
                     <%- itemIcon(item, ['piece-icon']); %>
                   </div>
               <% }); %>
             </div>
           <% } %>
 
-          <% if(farming.crops.length > 0){ %>
+          <% if(Object.keys(calculated.farming.crops).length > 0){ %>
             <button class="stat-sub-header extender" aria-controls="farming-crops" aria-expanded="false">Farming Crops</button>
             <div class="stat-farming-crops extendable" id="farming-crops">
               <%
-              const crops = Object.values(farming.crops).sort((a, b) => {
+              const crops = Object.values(calculated.farming.crops).sort((a, b) => {
                 return b.contests - a.contests;
               });
 
@@ -1460,9 +1447,9 @@ if(rod.length > 0)
                     <span class="stat-value">${crop.badges[badge].toLocaleString()}</span><br>
                   `;
               %>
-              <div class="collection" data-tippy-content="<%= amountsTooltip %>">
-                <div class="collection-icon"><div class="item-icon icon-<%= crop.icon %>"></div></div>
-                <div class="collection-stats">
+              <div class="chip" data-tippy-content="<%= amountsTooltip %>">
+                <div class="chip-icon-wrapper"><div class="item-icon icon-<%= crop.icon %>"></div></div>
+                <div class="chip-text">
                   <div class="collection-name <%= crop.unique_gold ? 'max-minion' : '' %>"><span class="stat-name"><%= crop.name %></span></div>
                   <div class="collection-amount">
                     <small class="stat-name">Personal Best: </small><small class="stat-value"><%= helper.formatNumber(crop.personal_best, true) %></small><br>
@@ -1539,7 +1526,6 @@ if(rod.length > 0)
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
-                    <div class="piece-hover-area"></div>
                     <div class="select-rod"></div>
                     <%- itemIcon(item, ['piece-icon']); %>
                   </div>
@@ -1601,9 +1587,9 @@ if(rod.length > 0)
                 %>
                 <%- /*html*/`
                 <hr>
-                <div class="collection">
-                  <div class="collection-icon"><div class="item-icon icon-${esc( tier_data.icon.replace(':', '_') )}"></div></div>
-                  <div class="collection-stats">
+                <div class="chip">
+                  <div class="chip-icon-wrapper"><div class="item-icon icon-${esc( tier_data.icon.replace(':', '_') )}"></div></div>
+                  <div class="chip-text">
                     <div class="collection-name"><span class="stat-name">${esc( tier_data.name )}</span></div>
                     <div class="collection-amount">
                       ${Object.entries(tier_data).filter(([key, value]) => key != 'name' && key != 'icon').map(([key, value]) => {
@@ -1713,17 +1699,20 @@ if(rod.length > 0)
                   <% for (let [stat, value] of Object.entries(floor.best_runs[floor.best_runs.length - 1])) {
                     if(stat == "teammates") continue; %>
                     <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
-                    <span class="stat-value">
-                    <% switch (stat) { case "timestamp": %>
-                      <%= moment(value).fromNow() %>
-                    <% break; case "elapsed_time": %>
-                      <%= moment.duration(value, "milliseconds").format("m:ss.SSS") %>
-                    <% break; case "dungeon_class": %>
-                      <%= helper.titleCase(value) %>
-                    <% break; default: %>
-                      <%= helper.formatNumber(value) %>
-                    <% } %>
-                    </span><br>
+                    <span class="stat-value" <%- stat == "timestamp" ? `data-tippy-content='<local-time timestamp="${value}"></local-time>'` : ""%>><%=
+                      (() => {
+                        switch (stat) {
+                          case "timestamp":
+                            return moment(value).fromNow();
+                          case "elapsed_time":
+                            return moment.duration(value, "milliseconds").format("m:ss.SSS");
+                          case "dungeon_class":
+                            return helper.titleCase(value);
+                          default:
+                            return helper.formatNumber(value);
+                        }
+                      })()
+                    %></span><br>
                   <% } %>
                   </div>
                 <% } %>
@@ -1776,17 +1765,20 @@ if(rod.length > 0)
                   <% for (let [stat, value] of Object.entries(floor.best_runs[floor.best_runs.length - 1])) {
                     if(stat == "teammates") continue; %>
                     <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
-                    <span class="stat-value">
-                    <% switch (stat) { case "timestamp": %>
-                      <%= moment(value).fromNow() %>
-                    <% break; case "elapsed_time": %>
-                      <%= moment.duration(value, "milliseconds").format("m:ss.SSS") %>
-                    <% break; case "dungeon_class": %>
-                      <%= helper.titleCase(value) %>
-                    <% break; default: %>
-                      <%= helper.formatNumber(value) %>
-                    <% } %>
-                    </span><br>
+                    <span class="stat-value" <%- stat == "timestamp" ? `data-tippy-content='<local-time timestamp="${value}"></local-time>'` : ""%>><%=
+                      (() => {
+                        switch (stat) {
+                          case "timestamp":
+                            return moment(value).fromNow();
+                          case "elapsed_time":
+                            return moment.duration(value, "milliseconds").format("m:ss.SSS");
+                          case "dungeon_class":
+                            return helper.titleCase(value);
+                          default:
+                            return helper.formatNumber(value);
+                        }
+                      })()
+                    %></span><br>
                   <% } %>
                   </div>
                 <% } %>
@@ -1800,7 +1792,7 @@ if(rod.length > 0)
         <% if (calculated.dungeons.unlocked_collections) { %>
           <p class="stat-sub-header">Boss Collections</p>
 
-          <div class="boss-collections">
+          <div class="collections">
           <%
           for(let boss in calculated.dungeons.boss_collections){
             let collection = calculated.dungeons.boss_collections[boss];
@@ -1817,9 +1809,9 @@ if(rod.length > 0)
             if (collection.unclaimed > 0)
               claimedTooltip += `<span class="stat-name">Unclaimed items: </span><span class="stat-value">${collection.unclaimed}</span>`;
           %>
-          <div class="boss-collection" <% if (claimedTooltip != "") { %>data-tippy-content="<%= claimedTooltip %>"<% } %>>
-            <div class="boss-collection-icon" style="background-image:url(/head/<%= collection.texture %>)"></div>
-            <div class="collection-stats">
+          <div class="chip" <% if (claimedTooltip != "") { %>data-tippy-content="<%= claimedTooltip %>"<% } %>>
+            <div class="chip-icon-wrapper"><div style="background-image:url(/head/<%= collection.texture %>)" class="item-icon custom-icon"></div></div>
+            <div class="chip-text">
               <div class="collection-name <%= collection.maxed ? 'max-stat' : '' %>"><span class="stat-name"><%= collection.name %> </span><% if (collection.tier > 0) { %><span class="stat-value"><%= collection.tier %></span><% } %></div>
               <div class="collection-amount"><span class="stat-name">Bosses killed: </span><span class="stat-value"><%= collection.killed.toLocaleString() %></span></div>
             </div>
@@ -1977,13 +1969,15 @@ if(rod.length > 0)
               <% for(let i = 1; i <= minion.tiers; i++){ %>
               <div class='minion-variant <% if(minion.levels.includes(i)){ %>minion-crafted<% } %>'><%= romanize(i) %></div>
               <% } %>
-              " class="minion
+              " class="chip
               <%= minion.maxLevel == 0 ? 'no-minion' : '' %>
               <%= minion.maxLevel == minion.tiers ? 'max-stat' : '' %>
               <%= minion.maxLevel != minion.levels.length ? 'skipped-minion' : '' %>
               ">
-                <div class="minion-icon" style="background-image: url(<%= minion.head %>)"></div>
-                <span class="stat-name"><%= minion.name %> </span><span class="stat-value"><%= minion.maxLevel %></span>
+                <div class="chip-icon-wrapper"><div style="background-image: url(<%= minion.head %>)" class="item-icon custom-icon"></div></div>
+                <div class="chip-text">
+                  <span class="stat-name"><%= minion.name %> </span><span class="stat-value"><%= minion.maxLevel %></span>
+                </div>
               </div>
             <% } %>
           </div>
@@ -2048,9 +2042,9 @@ if(rod.length > 0)
 
                 amountsTooltip += `<br><span class="stat-name">Total: </span><span class="stat-value">${collection.totalAmount.toLocaleString()}</span>`;
               %>
-                <div class="collection" data-tippy-content="<%= amountsTooltip %>">
-                  <div class="collection-icon"><div class="item-icon icon-<%= collection.id %>_<%= collection.damage %>"></div></div>
-                  <div class="collection-stats">
+                <div class="chip" data-tippy-content="<%= amountsTooltip %>">
+                  <div class="chip-icon-wrapper"><div class="item-icon icon-<%= collection.id %>_<%= collection.damage %>"></div></div>
+                  <div class="chip-text">
                     <div class="collection-name <%= collection.tier >= collection.maxTier ? 'max-stat' : '' %>"><span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span></div>
                     <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= collection.amount.toLocaleString() %></span></div>
                   </div>
