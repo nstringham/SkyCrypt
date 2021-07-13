@@ -903,24 +903,30 @@ if(rod.length > 0)
         }
       </div>
     </div>
-      ` %>
     <div id="nav_bar">
       <div id="nav_bar_line"></div>
       <div id="nav_bar_background"></div>
       <div id="nav_items_container">
-        <a class="nav-item" href="#Armor">Armor</a>
-        <% if(!items.no_inventory){ %><a class="nav-item" href="#Weapons">Weapons</a><% } %>
-        <% if(!items.no_inventory){ %><a class="nav-item" href="#Accessories">Accessories</a><% } %>
-        <% if(calculated.pets.length > 0){ %><a class="nav-item" href="#Pets">Pets</a><% } %>
-        <% if(!items.no_inventory){ %><a class="nav-item" href="#Inventory">Inventory</a><% } %>
-        <a class="nav-item" href="#Skills">Skills</a>
-        <a class="nav-item" href="#Dungeons">Dungeons</a>
-        <a class="nav-item" href="#Slayer">Slayer</a>
-        <a class="nav-item" href="#Minions">Minions</a>
-        <% if(Object.keys(calculated.collections).length > 0){ %><a class="nav-item" href="#Collections">Collections</a><% } %>
-        <% if(Object.keys(calculated.misc).length > 0){ %><a class="nav-item" href="#Misc"><abbr title="Miscellaneous">Misc</abbr></a><% } %>
+        ${
+          [
+            {id: "Armor", text: "Armor"},
+            {id: "Weapons", text: "Weapons", hidden: items.no_inventory},
+            {id: "Accessories", text: "Accessories", hidden: items.no_inventory},
+            {id: "Pets", text: "Pets", hidden: !calculated.pets.length > 0},
+            {id: "Inventory", text: "Inventory", hidden: items.no_inventory},
+            {id: "Skills", text: "Skills"},
+            {id: "Dungeons", text: "Dungeons"},
+            {id: "Slayer", text: "Slayer"},
+            {id: "Minions", text: "Minions"},
+            {id: "Collections", text: "Collections", hidden: !Object.keys(calculated.collections).length > 0},
+            {id: "Misc", text: /*html*/`<abbr title="Miscellaneous">Misc</abbr>`, hidden: !Object.keys(calculated.misc).length > 0},
+          ].filter(link => !link.hidden).map(link => {
+            return/*html*/`<a class="nav-item" href="#${link.id}">${link.text}</a>`;
+          }).join("")
+        }
       </div>
     </div>
+    ` %>
     <div class="stat-containers">
     <%
       const notAvailable = [];
