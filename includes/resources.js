@@ -36,7 +36,7 @@ function render({ page, fileHashes, fileNameMap, extra }) {
 
   gtag('config', 'UA-185827357-1');
 </script>
-<script data-ad-client="ca-pub-7557628142725978" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script data-ad-client="ca-pub-7573886460664405" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
 ${
   page == "stats"
@@ -54,6 +54,8 @@ ${
 <script> const extra = JSON.parse(\`${JSON.stringify(extra).replace(/\\/g, "\\\\")}\`); </script>
 
 <script src="/resources/js/${fileNameMap["common"]}"></script>
+
+<script async defer src="/resources/js/${fileNameMap["browser-compat-check"]}"></script>
   `;
 }
 
