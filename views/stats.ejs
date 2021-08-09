@@ -898,13 +898,11 @@ if(rod.length > 0)
             <div class='tippy-explanation'>Weight calculations provided by Senither</div>
           `}">
             <span class="stat-name">Weight: </span>
-            <span class="stat-value">${ parseFloat(calculated.weight.toFixed(2)).toLocaleString() }</span>
-            ${
+            <span class="stat-value">${ parseFloat(calculated.weight.toFixed(2)).toLocaleString() }</span>${
               (!calculated.skillWeight || !calculated.slayerWeight || !calculated.dungeonsWeight)
               ? /*html*/`<span class="stat-value stat-error">!</span>`
               : ''
-            }
-          </span>
+          }</span>
         </div>
       </div>
 
