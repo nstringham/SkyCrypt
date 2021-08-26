@@ -4,7 +4,6 @@ const { getId } = helper;
 const lib = require("./lib");
 const constants = require("./constants");
 const cors = require("cors");
-const { hasPath } = require("./helper");
 
 function handleError(e, res) {
   console.error(e);
@@ -281,7 +280,7 @@ module.exports = (app, db) => {
         let cakes = [];
 
         for (const item of cakeBag.containsItems) {
-          if (helper.hasPath(item, "tag", "ExtraAttributes", "new_years_cake")) {
+          if (item?.tag?.ExtraAttributes?.new_years_cake != undefined) {
             cakes.push({ cake: item.tag.ExtraAttributes.new_years_cake });
           }
         }
@@ -346,7 +345,7 @@ module.exports = (app, db) => {
         const extra = weapon.extra;
         let extraOutput = weapon.extra;
 
-        if (hasPath(weapon, "tag", "ExtraAttributes")) {
+        if (weapon?.tag?.ExtraAttributes != undefined) {
           if ("html" in req.query) {
             if (enchantments !== undefined) {
               enchantmentsOutput = [];
@@ -535,7 +534,7 @@ module.exports = (app, db) => {
           sellPrice: product.sellPrice,
           buyVolume: product.buyVolume,
           sellVolume: product.sellVolume,
-          tag: helper.hasPath(itemInfo, "tag") ? itemInfo.tag : null,
+          tag: itemInfo?.tag ?? null,
           price: (product.buyPrice + product.sellPrice) / 2,
         });
       }
