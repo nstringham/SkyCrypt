@@ -270,7 +270,7 @@ module.exports = (app, db) => {
 
       const allItems = items.armor.concat(items.inventory, items.talisman_bag, items.enderchest);
 
-      const cakeBags = allItems.filter((a) => helper.getPath(a, "tag", "ExtraAttributes", "id") == "NEW_YEAR_CAKE_BAG");
+      const cakeBags = allItems.filter((a) => a?.tag?.ExtraAttributes?.id == "NEW_YEAR_CAKE_BAG");
 
       if (cakeBags.length == 0) {
         res.set("Content-Type", "text/plain");
