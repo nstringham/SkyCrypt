@@ -78,29 +78,6 @@ module.exports = {
     return loc;
   },
 
-  /**
-   * @deprecated because it's inefficient
-   *
-   * sets value at path on object
-   * @param {any} obj an object
-   * @param {any} value a value
-   * @param  {...(string|number)} keys a path
-   */
-  setPath: (obj, value, ...keys) => {
-    let i;
-    let loc = obj || {};
-
-    for (i = 0; i < keys.length - 1; i++) {
-      if (loc[keys[i]] == undefined) {
-        loc[keys[i]] = {};
-      }
-
-      loc = loc[keys[i]];
-    }
-
-    loc[keys[i]] = value;
-  },
-
   getId: (item) => {
     return item?.tag?.ExtraAttributes?.id ?? "";
   },
