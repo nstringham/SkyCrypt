@@ -102,11 +102,7 @@ module.exports = {
   },
 
   getId: (item) => {
-    if (module.exports.hasPath(item, "tag", "ExtraAttributes", "id")) {
-      return item.tag.ExtraAttributes.id;
-    }
-
-    return "";
+    return item?.tag?.ExtraAttributes?.id ?? "";
   },
 
   resolveUsernameOrUuid: async (uuid, db, cacheOnly = false) => {
@@ -140,11 +136,11 @@ module.exports = {
       model: "slim",
     };
 
-    if (user && module.exports.hasPath(user, "skinurl")) {
+    if (user?.skinurl != undefined) {
       skin_data.skinurl = user.skinurl;
       skin_data.model = user.model;
 
-      if (module.exports.hasPath(user, "capeurl")) {
+      if (user?.capeurl != undefined) {
         skin_data.capeurl = user.capeurl;
       }
     }
@@ -164,12 +160,12 @@ module.exports = {
               date: +new Date(),
             };
 
-            if (module.exports.hasPath(data.textures, "skin")) {
+            if (data.textures?.skin != undefined) {
               skin_data.skinurl = data.textures.skin.url;
               skin_data.model = data.textures.slim ? "slim" : "default";
             }
 
-            if (module.exports.hasPath(data.textures, "cape")) {
+            if (data.textures?.cape != undefined) {
               skin_data.capeurl = data.textures.cape.url;
             }
 
@@ -208,12 +204,12 @@ module.exports = {
 
           data.id = data.uuid.replace(/-/g, "");
 
-          if (module.exports.hasPath(data.textures, "skin")) {
+          if (data.textures?.skin != undefined) {
             skin_data.skinurl = data.textures.skin.url;
             skin_data.model = data.textures.slim ? "slim" : "default";
           }
 
-          if (module.exports.hasPath(data.textures, "cape")) {
+          if (data.textures?.cape != undefined) {
             skin_data.capeurl = data.textures.cape.url;
           }
 
@@ -222,11 +218,7 @@ module.exports = {
           if (isUuid) {
             return { uuid, display_name: uuid, skin_data };
           } else {
-            if (module.exports.hasPath(e, "response", "data", "reason")) {
-              throw e.response.data.reason;
-            } else {
-              throw "Failed resolving username.";
-            }
+            throw e?.response?.data?.reason ?? "Failed resolving username.";
           }
         }
       }
@@ -681,11 +673,11 @@ module.exports = {
 
       rank = Object.assign(rank, module.exports.parseRank(player));
 
-      if (module.exports.hasPath(player, "socialMedia", "links")) {
+      if (player?.socialMedia?.links != undefined) {
         rank.socials = player.socialMedia.links;
       }
 
-      if (module.exports.hasPath(player, "achievements")) {
+      if (player?.achievements != undefined) {
         rank.achievements = player.achievements;
       }
 
@@ -701,7 +693,7 @@ module.exports = {
       };
 
       for (const item in claimable) {
-        if (module.exports.hasPath(player, item)) {
+        if (player?.[item]) {
           rank.claimed_items[claimable[item]] = player[item];
         }
       }
