@@ -500,7 +500,7 @@ module.exports = {
     }
 
     // TODO: fix
-    // if ("leather" in outputTexture && helper.hasPath(item, "tag", "ExtraAttributes", "color")) {
+    // if ("leather" in outputTexture && item?.tag?.ExtraAttributes?.color != undefined) {
     //   const color = item.tag.ExtraAttributes.color.split(":");
 
     //   const leatherBasePath = path.resolve(path.dirname(outputTexture.path), "leatherCache");
